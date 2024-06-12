@@ -20,8 +20,29 @@ jobs:
     steps:
     - uses: actions/stale@v5
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Stale issue message'
-        stale-pr-message: 'Stale pull request message'
-        stale-issue-label: 'stalr'
-        stale-pr-label: 'stale'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}   
+        operations-per-run: 1000
+        ascending: true
+        
+        exempt-all-issue-assignees: true
+        exempt-all-issue-milestones: true
+        days-before-issue-stale: 30
+        days-before-issue-close: 7
+        stale-issue-label: "stale"
+        close-issue-reason: not_planned
+        remove-issue-stale-when-updated: true
+        stale-issue-message: "This issue is stale because it has been open for 90 days with no activity."
+        close-issue-message: "This issue was closed because it has been inactive for 7 days since being marked as stale."
+
+
+        exempt-all-pr-milestones: true
+        exempt-all-pr-assignees: true
+        exempt-draft-pr: true
+        days-before-pr-stale: 30
+        days-before-pr-close: 7
+        stale-pr-label: "stale"
+        close-pr-label: not_planned
+        remove-pr-stale-when-updated: true
+        stale-pr-message: "This Pull Request is stale because it has been open for XX days with no activity."
+        close-pr-message: "This Pull Request was closed because it has been inactive for X days since being marked as stale."
+        delete-branch: true
