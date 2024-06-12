@@ -1,4 +1,6 @@
 import os
+import uos
+
 def exist(filename):
     try:
         os.stat(filename)
@@ -18,3 +20,6 @@ def copy(source, target):
                 l = source.read(512)
                 if not l: break
                 target.write(l)
+
+def create_folder(name):
+    uos.mkdir(name)

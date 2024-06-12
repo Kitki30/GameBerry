@@ -1,0 +1,20 @@
+{
+    "buzzer_volume": 1000,
+    "lcd_brightness": 255,
+    "timezone": {
+        "timezone": 2,
+        "timezone_on_minus": false
+    },
+    "Wi-Fi": {
+        "wifi_ssid": "",
+        "wifi_password": ""
+    },
+    "online_services": {
+        "allow_activation": false,
+        "allow_crash_reporting": false
+    },
+    "sys_data": {
+        "first_start": false,
+        "id": "0000"
+    }
+}

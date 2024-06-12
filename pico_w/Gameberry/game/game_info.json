@@ -1,0 +1,10 @@
+{
+    "name": "BerryClicker",
+    "author": "Kitki30",
+    "license": "MIT",
+    "id": "O00000",
+    "saveDataManager": {
+        "default": "save_default.json",
+        "format": "json"
+    }
+}
