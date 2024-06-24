@@ -3,12 +3,12 @@ import modules.files as files
 import modules.customExceptions as exceptions
 import network
 import modules.requests as requests
-import modules.files as files
+import gc
 
 translation = None
 updatePath = "https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/translations/"
 
-def load(lang = "en"):
+def load(lang):
     global translation
     translationFile = "/translations/"+lang+".json"
     if files.exist(translationFile):
@@ -18,14 +18,15 @@ def load(lang = "en"):
         raise exceptions.TranslationNotFound("Translation '"+lang+"' not found!")
         
 
-def get(thing):
+def get(thing1, thing2):
     if translation == None:
         load("en")
-        return translation["translation"][thing]
+        return translation["translation"][thing1][thing2]
     else:
-        return translation["translation"][thing]
+        return translation["translation"][thing1][thing2]
     
-def update(lang = "en"):
+def update(lang):
+    gc.collect()
     wlan = network.WLAN(network.STA_IF)
     if wlan.isconnected() == True:
         request = requests.GET(updatePath+lang+".json")
@@ -33,7 +34,8 @@ def update(lang = "en"):
             if files.exist("/translations/"+lang+".json"):
                 translation_json = json.read("/translations/"+lang+".json")
                 request_json = request.json()
-                if translation_json["info"]["version"] < request_json["info"]["version"]:
+                print(request_json["info"]["version"])
+                if request_json["info"]["version"] > translation_json["info"]["version"]:
                     print("Updating translation...")
                     with open('/translations/'+lang+".json", 'wb') as file:
                         file.write(request.content)

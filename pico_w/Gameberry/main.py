@@ -31,7 +31,7 @@ homestate = 1
 
 safeboot = False
 
-translation.load("en")
+
 
 if home.value() == 0:
     safeboot = True
@@ -42,23 +42,11 @@ if home.value() == 0:
             safeboot = False
         time.sleep(5)
 
-# Gameberry logo
-timeFormatted = utime.localtime(timezones.get_timezoned())
-print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-print("GameBerry v"+str(version)+" on " + uos.uname().machine)
-print("Machine frequency: "+str(machine.freq() / 1000000)+" Mhz")
-print(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0])+" "+str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
-print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-
-# RTC Clock
-rtc = machine.RTC()
-
-print("Initializing lcd")
 lcd=RGB1602.RGB1602(16,2)
 lcd.clear()
 lcd.setRGB(0,0,0)
 if files.exist("/settings.json"):
-    print("Settings exist!")
+    print(translation.get("debugger", "settings_exist")) # Settings exist!
 else:
     if files.exist("/default/settings_default.json"):
         try:
@@ -71,12 +59,27 @@ else:
         raise exceptions.DefaultsNotFound("Default file /default/settings_default.json, not found! Cannot boot!")
 data = json.read("/settings.json")
 
+translation.load(data["language"])
+
+# Gameberry logo
+timeFormatted = utime.localtime(timezones.get_timezoned())
+print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+print("GameBerry v"+str(version)+" "+ translation.get("debugger", "gameberry_on") +" "+ uos.uname().machine) # Gameberry v{version} on {machine name}
+print(translation.get("debugger", "machine_freq")+": "+str(machine.freq() / 1000000)+" Mhz") # Machine frequency: {freq}Mhz
+print(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0])+" "+str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
+print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+
+# RTC Clock
+rtc = machine.RTC()
+
+
+
 
 
 
 
 if files.exist("/savedata"):
-    print("Savedata exists")
+    print(translation.get("debugger", "savedata_exist")) # Savedata exist!
 else:
     files.create_folder("/savedata")
 
@@ -91,7 +94,7 @@ wlan.connect(data.get("Wi-Fi").get("wifi_ssid"), data.get("Wi-Fi").get("wifi_pas
         
 
 # Led blink
-print("Waiting one second")
+print(translation.get("debugger", "waiting_one_second")) # Waiting one second
 led = Pin("LED", Pin.OUT)
 blinks = 0
 while blinks is not 10:
@@ -102,22 +105,7 @@ while blinks is not 10:
     led.off()
 led.on()
 
-def eventloop():
-    global runEvents
-    global events_working
-    rtc_sync_time = 0
-    while runEvents == True:
-        time.sleep(1)
-        rtc_sync_time = rtc_sync_time + 1
-        if rtc_sync_time == 30 and wlan.isconnected() == True:
-            rtc_sync_time = 0
-            events_working = True
-            ntp.sync(wlan)
-            events_working = False
 
-# Run event loop
-print("Running event loop thread")
-# _thread.start_new_thread(events_working, ())
 
 
 # Boot screen
@@ -138,14 +126,13 @@ lcd.clear()
     STAT_GOT_IP -- 3
 """
 
-# Initialize buzzer (GPIO8)
-print("Initializing buzzer")
+#  Buzzer (GPIO8)
 buzzer = PWM(Pin(8, Pin.OUT))
 buzzer.duty_u16(0)
 
 # Connect to wifi
 lcd.setCursor(0,0)
-lcd.printout("Connecting to")
+lcd.printout(translation.get("wifi", "connecting_to")) # Connecting to
 lcd.setCursor(0,1)
 if len(data.get("Wi-Fi").get("wifi_ssid")) > 16:
     lcd.printout("Wi-Fi")
@@ -157,25 +144,25 @@ while wlan.isconnected() == False and wifiChecks is not 200 and connectBlock == 
     if wlan.status() == -1:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Error")
+        lcd.printout(translation.get("global", "error")) # Error
         lcd.setCursor(0,1)
-        lcd.printout("Connection Fail")
+        lcd.printout(translation.get("wifi", "connection_fail")) # Connection Fail
         connectBlock = True
         time.sleep(1)
     elif wlan.status() == -2:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Error")
+        lcd.printout(translation.get("global", "error")) # Error
         lcd.setCursor(0,1)
-        lcd.printout("AP not found")
+        lcd.printout(translation.get("wifi", "ap_not_found")) # AP not found
         connectBlock = True
         time.sleep(1)
     elif wlan.status() == -3:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Error")
+        lcd.printout(translation.get("global", "error")) # Error
         lcd.setCursor(0,1)
-        lcd.printout("Wrong password")
+        lcd.printout(translation.get("wifi", "wrong_password")) # Wrong password
         connectBlock = True
         time.sleep(1)
     wifiChecks = wifiChecks + 1
@@ -187,10 +174,10 @@ led.on()
 
 
 # Sync clock
-if wlan.isconnected() == True and timeFormatted[0] < 2024:
-    print("Sync rtc clock..")
+if wlan.isconnected() == True:
+    print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
     lcd.clear()
-    lcd.printout("Setting clock...")
+    lcd.printout(translation.get("rtc", "setting_clock")) # Setting clock...
     ntp.sync(wlan)
 
 # Menu 
@@ -210,9 +197,9 @@ def main():
         gameInfo = json.read("/game/game_info.json")
         lcd.printout(gameInfo["name"])
     else:
-        lcd.printout("Game")
+        lcd.printout(translation.get("global", "game")) # Game
     lcd.setCursor(0,1)
-    lcd.printout("1. Play  2. Next")
+    lcd.printout(translation.get("menu", "play_next")) # 1. Play  2. Next
     print("Current menu: "+str(currentMenu))
 
 # Settings menu
@@ -223,9 +210,9 @@ def settings():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Settings")
+    lcd.printout(translation.get("global", "settings")) # Settings
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK    2. Next
     print("Current menu: "+str(currentMenu))
 
 # Exit
@@ -236,9 +223,9 @@ def exit():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Exit")
+    lcd.printout(translation.get("global", "exit")) # Exit
     lcd.setCursor(0,1)
-    lcd.printout("1. Exit  2. Next")
+    lcd.printout(translation.get("menu", "exit_next")) # 1. Exit  2. Next
     print("Current menu: "+str(currentMenu))
 
 def play():

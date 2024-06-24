@@ -1,6 +1,7 @@
 {
     "buzzer_volume": 1000,
     "lcd_brightness": 255,
+    "language": "en",
     "timezone": {
         "timezone": 2,
         "timezone_on_minus": false
