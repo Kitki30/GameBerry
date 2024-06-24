@@ -35,11 +35,18 @@ def update(lang = "en"):
                 request_json = request.json()
                 if translation_json["info"]["version"] < request_json["info"]["version"]:
                     print("Updating translation...")
+                    with open('/translations/'+lang+".json", 'wb') as file:
+                        file.write(request.content)
+                    print("Done")
+                    return True
                 else:
                     return True
             else:
+                print("Updating translation...")
                 with open('/translations/'+lang+".json", 'wb') as file:
                     file.write(request.content)
+                print("Done")
+                return True
 
     else:
         raise exceptions.WifiNotConnected("Wi-Fi is not connected, cannot update Translations!")
