@@ -10,13 +10,11 @@ import modules.ntp as ntp
 import modules.time as timezones
 import _thread
 import gc
-import modules.customExceptions as exceptions
-import modules.translations as translation
 
 events_working = False
 runEvents = True
 
-version = 0.6
+version = "v0.6"
 
 gc.collect()
 
@@ -31,13 +29,11 @@ homestate = 1
 
 safeboot = False
 
-translation.load("en")
-
 if home.value() == 0:
     safeboot = True
     while safeboot == True:
         print("Machine is in safeboot")
-        print("Press button 1 to continue!")
+        print("Press button 1 to continue execution of main.py")
         if button1.value() == 0:
             safeboot = False
         time.sleep(5)
@@ -45,7 +41,7 @@ if home.value() == 0:
 # Gameberry logo
 timeFormatted = utime.localtime(timezones.get_timezoned())
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-print("GameBerry v"+str(version)+" on " + uos.uname().machine)
+print("GameBerry "+version+" on " + uos.uname().machine)
 print("Machine frequency: "+str(machine.freq() / 1000000)+" Mhz")
 print(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0])+" "+str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
@@ -53,24 +49,19 @@ print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
 # RTC Clock
 rtc = machine.RTC()
 
-print("Initializing lcd")
-lcd=RGB1602.RGB1602(16,2)
-lcd.clear()
-lcd.setRGB(0,0,0)
+
 if files.exist("/settings.json"):
     print("Settings exist!")
 else:
-    if files.exist("/default/settings_default.json"):
-        try:
-            files.copy("/default/settings_default.json", "/settings.json")
-        except:
-            exceptions.ShowErrorScreen(lcd)
-            raise exceptions.FileCopyError("Cannot copy /default/settings_default.json to /settings.json! Cannot boot!")
-    else:
-        exceptions.ShowErrorScreen(lcd)
-        raise exceptions.DefaultsNotFound("Default file /default/settings_default.json, not found! Cannot boot!")
-data = json.read("/settings.json")
+    files.copy("./default/settings.json", "./settings.json")
 
+data = json.read("/settings.json")
+sys_data = data["sys_data"]
+if sys_data["first_start"] == False:
+    import modules.firstStart as firstStart
+    gc.collect()
+    firstStart.start()
+    machine.soft_reset()
 
 
 
@@ -120,7 +111,10 @@ print("Running event loop thread")
 # _thread.start_new_thread(events_working, ())
 
 
-# Boot screen
+# Initialize lcd
+print("Initializing lcd")
+lcd=RGB1602.RGB1602(16,2)
+lcd.clear()
 _temp_lcd_brightness = data.get('lcd_brightness')
 lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
 lcd.printout("GameBerry")

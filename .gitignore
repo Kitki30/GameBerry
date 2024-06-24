@@ -2,7 +2,7 @@ settings.json
 /.vscode/
 .micropico
 *.code-workspace
-
+__pycache__
 
 # =========================
 # Windows detritus
