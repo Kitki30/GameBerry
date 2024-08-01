@@ -28,40 +28,6 @@ jobs:
           black pico_w/Gameberry --quiet --exclude 'pico_w/Gameberry/.*\.py' --skip-string-normalization --line-length 79 --target-version py311 --fast
           cp -r pico_w/Gameberry formatted
 
-      - name: Minify JSON files using Python
-        run: |
-          mkdir -p minified
-          python -c "
-import os
-import json
-
-def minify_json_file(file_path):
-    with open(file_path, 'r') as f:
-        data = json.load(f)
-    with open(file_path, 'w') as f:
-        json.dump(data, f, separators=(',', ':'))
-
-for root, dirs, files in os.walk('pico_w/Gameberry'):
-    for file in files:
-        if file.endswith('.json'):
-            minify_json_file(os.path.join(root, file))
-            os.rename(os.path.join(root, file), os.path.join('minified', file))
-" 
-
-      - name: Zip minified files
-        run: zip -r pico_w.zip minified
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.sha }}  # Use the commit SHA as the tag
-          release_name: '${{ github.sha }}'
-          draft: false
-          prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
