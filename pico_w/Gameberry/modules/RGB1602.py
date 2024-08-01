@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 from machine import Pin,I2C
+import modules.characterSets as charSets
 
 RGB1602_SDA = Pin(4)
 RGB1602_SCL = Pin(5)
@@ -90,6 +91,7 @@ class RGB1602:
   def clear(self):
     self.command(LCD_CLEARDISPLAY)
     time.sleep(0.002)
+
   def printout(self,arg):
     if(isinstance(arg,int)):
       arg=str(arg)
@@ -143,7 +145,14 @@ class RGB1602:
     # set MODE2 values
     # 0010 0000 -> 0x20  (DMBLNK to 1, ie blinky mode)
     self.setReg(REG_MODE2, 0x20)
+    charSets.default(self)
     self.setColorWhite()
+
+  def create_custom_char(self, location, charmap):
+    location &= 0x7
+    self.command(LCD_SETCGRAMADDR | (location << 3))
+    for i in range(8):
+        self.write(charmap[i])
 
   def setColorWhite(self):
     self.setRGB(255, 255, 255)

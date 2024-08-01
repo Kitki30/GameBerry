@@ -21,10 +21,17 @@ class DefaultsNotFound(Exception):
 class WifiNotConnected(Exception):
     pass
 
+# POST
+class LcdDisplayError(Exception):
+    pass
+
+class FileReadWriteError(Exception):
+    pass
+
 # Error screen
 def ShowErrorScreen(lcd):
     lcd.setRGB(255,0,0)
     lcd.setCursor(0,0)
-    lcd.printout("Cannot boot!")
+    lcd.write(2)
     lcd.setCursor(0,1)
     lcd.printout("Connect debugger")

@@ -1,4 +1,55 @@
-from machine import UART, Pin
-import uos
+# POST
 
+# Blink code:
+# Broken lcd - 3 blinks
+# Broken lcd - 4 blinks
 
+print("POST:")
+import machine
+import modules.customExceptions
+import modules.blinker as blinker
+led = machine.Pin("LED", machine.Pin.OUT)
+led.on()
+
+# Flash memory
+try:
+    import random
+    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    digits = '0123456789'
+    chars = letters + digits
+    random1 = ''.join(random.choice(chars) for _ in range(64))
+    with open("/power_on_self_test_file", 'wb') as file:
+        file.write(random1.encode('utf-8'))
+    with open("/power_on_self_test_file", 'rb') as file:
+        readed = file.read().decode('utf-8')
+        if random1 == readed:
+            print("Flash memory - Working")
+        else:
+            raise modules.customExceptions.FileReadWriteError("Test file content was different when writing({}) and when reading({})".format(random1,readed))
+except Exception as exception:
+    print("Flash memory - Broken")
+    blinker.blink(4, 0.25)
+    raise modules.customExceptions.FileReadWriteError("Error happened when reading/writing to flash memory!\nError:\n"+str(exception))
+        
+# LCD
+try:
+    import modules.RGB1602 as l
+    lcd = l.RGB1602(16,2)
+    i = 0
+    i2 = 0
+    lcd.setCursor(0,0)
+    lcd.setRGB(0,0,0)
+    while i is not 2:
+        while i2 is not 16:
+            lcd.write(7)
+            i2 = i2 + 1
+        lcd.setCursor(0,1)
+        i = i + 1
+    lcd.clear()
+    print("LCD - Working")
+except OSError as osError:
+    print("LCD - Broken\n")
+    blinker.blink(3, 0.25)
+    raise modules.customExceptions.LcdDisplayError("LCD Display is not connected or has broken please check the display and connection to the board!\nError:\n"+str(osError))
+
+print("\nAll things working ready to boot!")

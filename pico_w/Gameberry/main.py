@@ -12,6 +12,7 @@ import _thread
 import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
+import os
 
 events_working = False
 runEvents = True
@@ -173,12 +174,7 @@ while wlan.isconnected() == False and wifiChecks is not 200 and connectBlock == 
 led.on()
 
 
-# Sync clock
-if wlan.isconnected() == True:
-    print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
-    lcd.clear()
-    lcd.printout(translation.get("rtc", "setting_clock")) # Setting clock...
-    ntp.sync(wlan)
+
 
 # Menu 
 
@@ -624,10 +620,74 @@ def connect():
         lcd.printout("Setting clock...")
         ntp.sync(wlan)
 
+def OctoPrint1():
+    global currentMenu
+    currentMenu = 30
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("OctoPrint")
+    lcd.setCursor(0,1)
+    lcd.printout("1. OK  2. Next")
+    print("Current menu: "+str(currentMenu))  
 
+def OctoPrint():
+    lcd.clear()
+    lcd.setCursor(0,0)
+    lcd.printout("Loading...")
+    lcd.setCursor(0,1)
+    lcd.printout("0/3")
+    file1 = False
+    file2 = False
+    if files.exist("/plugins/octoprint.py"):
+        file1 = True
+    lcd.clear()
+    lcd.setCursor(0,0)
+    lcd.printout("Loading...")
+    lcd.setCursor(0,1)
+    lcd.printout("1/3")
+    if files.exist("/plugins/octolib.py"):
+        file2 = True
+    lcd.clear()
+    lcd.setCursor(0,0)
+    lcd.printout("Loading...")
+    lcd.setCursor(0,1)
+    lcd.printout("2/3")
+    if file1 == True and file2 == True:
+        lcd.clear()
+        lcd.setCursor(0,0)
+        lcd.printout("Loading...")
+        lcd.setCursor(0,1)
+        lcd.printout("3/3")
+        import plugins.octoprint as ocp
+        ocp.start(lcd)
+    else:
+        lcd.clear()
+        lcd.setCursor(0,0)
+        lcd.printout("Please install")
+        lcd.setCursor(0,1)
+        lcd.printout("OctoPrint Plugin")
+        time.sleep(1)
+        main()
+
+# Sync clock
+if wlan.isconnected() == True:
+    print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
+    lcd.clear()
+    lcd.printout(translation.get("rtc", "setting_clock")) # Setting clock...
+    ntp.sync(wlan)
+    if files.exist("/startOptions.gameberry"):
+        f = open('/startOptions.gameberry')
+        if f.read() == "octo-plugin":
+            f.close()
+            os.remove('/startOptions.gameberry')
+            OctoPrint()
+        
 
 print("Going to the menu for first time...")
 main()
+
 
 while True:
 
@@ -702,6 +762,8 @@ while True:
                 data['buzzer_volume'] = data['buzzer_volume'] + 100
             json.write("/settings.json", data)
             settings_buzzer_volume_selection()
+        elif currentMenu == 30:
+            OctoPrint()
     elif button1.value() == 1 and button1state == 0:
         print("Button state updated")
         button1state = 1
@@ -729,6 +791,8 @@ while True:
         elif currentMenu == 9:
             wifi()
         elif currentMenu == 10:
+            OctoPrint1()
+        elif currentMenu == 30:
             appsExit()
         elif currentMenu == 11:
             whatTimeIsIt2()
