@@ -28,6 +28,21 @@ jobs:
           black pico_w/Gameberry --quiet --exclude 'pico_w/Gameberry/.*\.py' --skip-string-normalization --line-length 79 --target-version py311 --fast
           cp -r pico_w/Gameberry formatted
 
+      
+      - name: Zip minified files
+        run: zip -r pico_w.zip minified
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.sha }}  # Use the commit SHA as the tag
+          release_name: 'Minified Files ${{ github.sha }}'
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
