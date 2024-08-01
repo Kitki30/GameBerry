@@ -22,30 +22,30 @@ jobs:
         run: |
           pip install black  # Install black for formatting
           
-      - name: Get commit message
+      - name: Get commit message and short SHA
         id: get_commit_message
         run: |
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          echo "COMMIT_MESSAGE=${COMMIT_MESSAGE}" >> $GITHUB_ENV
           SHORT_SHA=$(git rev-parse --short=7 HEAD)  # Get the first 7 characters of the commit SHA
+          echo "COMMIT_MESSAGE=${COMMIT_MESSAGE}" >> $GITHUB_ENV
           echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
-          
+          echo "Commit message: ${COMMIT_MESSAGE}"  # Output commit message for reference
+
       - name: Format Python files
         run: |
-          mkdir -p formatted
+          mkdir -p temp_dir
           black pico_w/Gameberry --quiet --exclude 'pico_w/Gameberry/.*\.py' --skip-string-normalization --line-length 79 --target-version py311 --fast
-          cp -r pico_w/Gameberry formatted
+          cp -r pico_w/Gameberry/* temp_dir  # Copy files from Gameberry to temp_dir without extra directory
 
-      
       - name: Zip minified files
-        run: zip -r pico_w.zip formatted/*
+        run: zip -r pico_w.zip temp_dir/*  # Zip the contents of temp_dir directly
 
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: '${{ env.SHORT_SHA }}'
-          release_name: '${{ github.sha }}'
+          tag_name: ${{ env.SHORT_SHA }}
+          release_name: ${{ env.COMMIT_MESSAGE }}
           draft: false
           prerelease: true
         env:
