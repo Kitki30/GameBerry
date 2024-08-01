@@ -38,7 +38,7 @@ jobs:
 
       
       - name: Zip minified files
-        run: zip -r pico_w.zip formatted
+        run: zip -r pico_w.zip formatted/*
 
       - name: Create GitHub Release
         id: create_release
