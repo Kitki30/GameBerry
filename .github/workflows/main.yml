@@ -1,4 +1,4 @@
-name: Minify
+name: Release bot
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main  # Trigger on push to the main branch
 
 jobs:
-  minify-and-zip:
+  minify-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,28 +20,41 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyminifier json-minify
+          pip install black json-minify
 
-      - name: Create minified directory
-        run: mkdir -p minified
-
-      - name: Minify MicroPython files
+      - name: Format Python files
         run: |
-          for file in src/*.py; do
-            pyminifier "$file" > "minified/$(basename $file)"
-          done
+          mkdir -p formatted
+          black pico_w/Gameberry --quiet --exclude 'pico_w/Gameberry/.*\.py' --skip-string-normalization --line-length 79 --target-version py311 --fast
+          cp -r pico_w/Gameberry formatted
 
       - name: Minify JSON files
         run: |
-          for file in src/*.json; do
+          mkdir -p minified
+          for file in pico_w/Gameberry/*.json; do
             json-minify "$file" > "minified/$(basename $file)"
           done
 
       - name: Zip minified files
-        run: zip -r release.zip minified/*
+        run: zip -r pico_w.zip minified
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
         with:
-          name: release
-          path: release.zip
+          tag_name: ${{ github.sha }}  # Use the commit SHA as the tag
+          release_name: '${{ github.sha }}'
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: pico_w.zip
+          asset_name: pico_w.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
