@@ -44,7 +44,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: '${{ github.SHORT_SHA }}'
+          tag_name: '${{ env.SHORT_SHA }}'
           release_name: '${{ github.sha }}'
           draft: false
           prerelease: true
