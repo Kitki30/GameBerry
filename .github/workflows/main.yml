@@ -30,14 +30,14 @@ jobs:
 
       
       - name: Zip minified files
-        run: zip -r pico_w.zip minified
+        run: zip -r pico_w.zip formatted
 
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.sha }}  # Use the commit SHA as the tag
-          release_name: 'Minified Files ${{ github.sha }}'
+          release_name: '${{ github.sha }}'
           draft: false
           prerelease: true
         env:
