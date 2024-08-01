@@ -27,6 +27,8 @@ jobs:
         run: |
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           echo "COMMIT_MESSAGE=${COMMIT_MESSAGE}" >> $GITHUB_ENV
+          SHORT_SHA=$(git rev-parse --short=7 HEAD)  # Get the first 7 characters of the commit SHA
+          echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
           
       - name: Format Python files
         run: |
@@ -42,7 +44,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          tag_name: '${{ github.SHORT_SHA }}'
           release_name: '${{ github.sha }}'
           draft: false
           prerelease: true
