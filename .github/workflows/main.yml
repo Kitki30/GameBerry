@@ -1,0 +1,47 @@
+name: Minify
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  minify-and-zip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'  # Use the appropriate Python version
+
+      - name: Install dependencies
+        run: |
+          pip install pyminifier json-minify
+
+      - name: Create minified directory
+        run: mkdir -p minified
+
+      - name: Minify MicroPython files
+        run: |
+          for file in src/*.py; do
+            pyminifier "$file" > "minified/$(basename $file)"
+          done
+
+      - name: Minify JSON files
+        run: |
+          for file in src/*.json; do
+            json-minify "$file" > "minified/$(basename $file)"
+          done
+
+      - name: Zip minified files
+        run: zip -r release.zip minified/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: release.zip
