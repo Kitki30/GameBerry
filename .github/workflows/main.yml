@@ -20,7 +20,7 @@ jobs:
         run: |
           pip install python-minifier
 
-      - name: Minify python files
+      - name: Minify python
         uses: jannekem/run-python-script-action@v1
         with:
           script: |
