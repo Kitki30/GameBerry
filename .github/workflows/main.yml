@@ -36,7 +36,7 @@ jobs:
                 if os.path.isdir(path  + "/" + file):
                   handle_folder(path + "/" + file)
                 
-            scan_path = "/pico_w/Gameberry/"
+            scan_path = "./pico_w/Gameberry/"
             files = os.listdir("./pico_w/Gameberry")
             print(files)  
             for file in files:
