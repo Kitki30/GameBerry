@@ -6,7 +6,7 @@ on:
       - main  # Trigger on push to the main branch
 
 jobs:
-  minify-and-release:
+  minify:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,12 +19,43 @@ jobs:
       - name: Install dependencies
         run: |
           pip install python-minifier
-        
-      - uses: jannekem/run-python-script-action@v1
+
+      - name: Minify python files
+        uses: jannekem/run-python-script-action@v1
         with:
           script: |
             import os
-            print(os.listdir())
+            import python_minifier
+            def handle_folder(path):
+              for file in os.listdir(path):
+                print("Scan: " + file)
+                if file.endswith(".py"):
+                  print("Minify: " + file)
+                  with open(path + "/" + file) as f:
+                    f.write(python_minifier.minify(f.read()))
+                if os.path.isdir(path  + "/" + file):
+                  handle_folder(path + "/" + file)
+                
+            scan_path = "/pico_w/Gameberry/"
+            files = os.listdir("./pico_w/Gameberry")
+            print(files)  
+            for file in files:
+              print("Scan: " + file)
+              if file.endswith(".py"):
+                print("Minify: " + file)
+                with open(scan_path + file) as f:
+                  f.write(python_minifier.minify(f.read()))
+              if os.path.isdir(scan_path + file):
+                print("called with: " + file)
+                handle_folder(scan_path + file)
+                
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.3.5
+        with:
+          name: Release pico_w
+          path: /pico_w/Gameberry/
+
+            
 
                 
             
