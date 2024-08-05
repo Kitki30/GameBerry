@@ -13,50 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12.4'  # Use the appropriate Python version
-
+      - name: Setup Python
+        uses: actions/setup-python@v5.1.1
+        
       - name: Install dependencies
         run: |
-          pip install black  # Install black for formatting
-          
-      - name: Get commit message and short SHA
-        id: get_commit_message
-        run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          SHORT_SHA=$(git rev-parse --short=7 HEAD)  # Get the first 7 characters of the commit SHA
-          echo "COMMIT_MESSAGE=${COMMIT_MESSAGE}" >> $GITHUB_ENV
-          echo "SHORT_SHA=${SHORT_SHA}" >> $GITHUB_ENV
-          echo "Commit message: ${COMMIT_MESSAGE}"  # Output commit message for reference
-
-      - name: Format Python files
-        run: |
-          mkdir -p temp_dir
-          black pico_w/Gameberry --quiet --exclude 'pico_w/Gameberry/.*\.py' --skip-string-normalization --line-length 79 --target-version py311 --fast
-          cp -r pico_w/Gameberry/* temp_dir  # Copy files from Gameberry to temp_dir without extra directory
-
-      - name: Zip minified files
-        run: zip -r pico_w.zip temp_dir/*  # Zip the contents of temp_dir directly
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
+          pip install python-minifier
+        
+      - uses: jannekem/run-python-script-action@v1
         with:
-          tag_name: ${{ env.SHORT_SHA }}
-          release_name: ${{ env.COMMIT_MESSAGE }}
-          draft: false
-          prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            import os
+            print(os.listdir())
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: pico_w.zip
-          asset_name: pico_w.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                
+            
