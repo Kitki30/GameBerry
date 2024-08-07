@@ -1,4 +1,4 @@
-name: Minify
+name: Release bot
 
 on:
   push:
@@ -6,42 +6,47 @@ on:
       - main  # Trigger on push to the main branch
 
 jobs:
-  minify-and-zip:
+  minify:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'  # Use the appropriate Python version
-
+      - name: Setup Python
+        uses: actions/setup-python@v5.1.1
+        
       - name: Install dependencies
         run: |
-          pip install pyminifier json-minify
+          pip install python-minifier
 
-      - name: Create minified directory
-        run: mkdir -p minified
-
-      - name: Minify MicroPython files
-        run: |
-          for file in src/*.py; do
-            pyminifier "$file" > "minified/$(basename $file)"
-          done
-
-      - name: Minify JSON files
-        run: |
-          for file in src/*.json; do
-            json-minify "$file" > "minified/$(basename $file)"
-          done
-
-      - name: Zip minified files
-        run: zip -r release.zip minified/*
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Minify python
+        uses: jannekem/run-python-script-action@v1
         with:
-          name: release
-          path: release.zip
+          script: |
+            import os
+            import python_minifier
+            
+            def handle_folder(path):
+                for file in os.listdir(path):
+                    full_path = os.path.join(path, file)
+                    print("Scan: " + file)
+                    if os.path.isdir(full_path):
+                        print("called with: " + file)
+                        handle_folder(full_path)
+                    elif file.endswith(".py"):
+                        print("Minify: " + file)
+                        with open(full_path, 'r') as f:
+                            content = f.read()
+                        minified_content = python_minifier.minify(content)
+                        with open(full_path, 'w') as f:
+                            f.write(minified_content)
+
+            scan_path = "./pico_w/Gameberry/"
+            handle_folder(scan_path)
+            
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.3.5
+        with:
+          name: Release pico_w
+          path: ./pico_w/Gameberry/
