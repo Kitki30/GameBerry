@@ -17,7 +17,7 @@ import os
 events_working = False
 runEvents = True
 
-version = 0.6
+version = 0.8
 
 gc.collect()
 
@@ -128,7 +128,7 @@ lcd.clear()
 """
 
 #  Buzzer (GPIO8)
-buzzer = PWM(Pin(8, Pin.OUT))
+buzzer = PWM(Pin(16, Pin.OUT))
 buzzer.duty_u16(0)
 
 # Connect to wifi

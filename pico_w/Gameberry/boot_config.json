@@ -1,0 +1,10 @@
+{
+    "main": {
+        "name": "Gameberry",
+        "file": "/gameberry.py"
+    },
+    "setup": {
+        "name": "Gameberry WebSetup",
+        "file": "/webSetup/webSetup.py"
+    }
+}

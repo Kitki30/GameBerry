@@ -30,31 +30,3 @@ def get(thing1, thing2):
         return translation["translation"][thing1][thing2]
     else:
         return translation["translation"][thing1][thing2]
-    
-def update(lang):
-    gc.collect()
-    wlan = network.WLAN(network.STA_IF)
-    if wlan.isconnected() == True:
-        request = requests.GET(updatePath+lang+".json")
-        if request.status_code == 200:
-            if files.exist("/translations/"+lang+".json"):
-                translation_json = json.read("/translations/"+lang+".json")
-                request_json = request.json()
-                print(request_json["info"]["version"])
-                if request_json["info"]["version"] > translation_json["info"]["version"]:
-                    print("Updating translation...")
-                    with open('/translations/'+lang+".json", 'wb') as file:
-                        file.write(request.content)
-                    print("Done")
-                    return True
-                else:
-                    return True
-            else:
-                print("Updating translation...")
-                with open('/translations/'+lang+".json", 'wb') as file:
-                    file.write(request.content)
-                print("Done")
-                return True
-
-    else:
-        raise exceptions.WifiNotConnected("Wi-Fi is not connected, cannot update Translations!")

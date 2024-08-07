@@ -9,5 +9,9 @@
     "Wi-Fi": {
         "wifi_ssid": "",
         "wifi_password": ""
+    },
+    "Battery": {
+        "capacity": 4000,
+        "is_used": true
     }
 }

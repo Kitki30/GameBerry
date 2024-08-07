@@ -1,9 +1,9 @@
 settings.json
-/.vscode/
+.vscode
 .micropico
 *.code-workspace
 __pycache__
-
+extensions.json
 # =========================
 # Windows detritus
 # =========================
