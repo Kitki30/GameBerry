@@ -11,14 +11,14 @@ freeze(".", "voltage_meter_mode.py")
 freeze(".", "boot_config.py")
 
 # Default files:
-freeze("default", "default/settings_default.py")
+freeze("default", "settings_default.py")
 
 # Translations:
-freeze("translations", "translations/en.py")
-freeze("translations", "translations/pl.py")
+freeze("translations", "en.py")
+freeze("translations", "pl.py")
 
 # Web Setup:
-freeze("webSetup", "webSetup/webSetup.py")
+freeze("webSetup", "webSetup.py")
 
 # Modules:
 freeze("modules")
