@@ -51,6 +51,7 @@ jobs:
           path: ./pico_w/Gameberry/
 
   json-to-python:
+    runs-on: ubuntu-latest
     needs: minify
     steps:
       - name: Checkout code
