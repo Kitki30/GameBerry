@@ -1,0 +1,100 @@
+name: Bug report
+description: Report a bug.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report bugs here!
+  - type: dropdown
+    id: microcontroller-dropdows
+    attributes:
+      label: Microcontroller
+      description: |
+        Please select microcontroller you are using
+      options:
+        - "Raspberry Pi Pico W"
+      multiple: false
+    validations:
+      required: true
+  - type: input
+    id: gameberry-version
+    attributes:
+      label: GameBerry version
+      description: |
+        To check the version:
+
+        1. Turn on microcontroller
+        2. Version will be shown on boot
+    
+      placeholder: |
+        v0.8
+    validations:
+      required: true
+    
+  - type: input
+    id: micropython-version
+    attributes:
+      label: Micropython version
+      description: |
+        Please type the version of micropython that is installed on your microcontroller.
+      placeholder: |
+        MicroPython v1.23.0 on 2024-05-31; darwin [GCC 4.2.1] version
+    validations:
+      required: true
+    
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Please enter steps to reproduce the bug.
+
+        If bug happens when you launch a game/plugin, please type Github Repo with code of Game/Plugin
+    
+      placeholder: |
+        1. Turn on microcontroller
+        2. Press Home button 20 times.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: |
+         What should it do?
+      placeholder: |
+        Expected to launch easter egg.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Observed behaviour / Error log
+      description: |
+        What happened? Provide error log if you can.
+      placeholder: |
+        My gameberry exploded 😮!
+    validations:
+      required: true
+  - type: checkboxes
+    id: additional-hardware
+    attributes:
+      label: Additional hardware used
+      description: You can select more than one.
+      options:
+        - label: Battery (Please provide type of battery, charger, capacity, and battery name in additional info)
+        - label: INA219 (Measures battery voltage, current and power)
+        - label: SD Card reader (Provide sd card capacity if sd card is used)
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additioal information
+      description: |
+        Anything else? Type additional information here!
+      placeholder: |
+        I used 32GB FAT32 formatted SD card
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to help improve Gameberry.
