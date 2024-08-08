@@ -103,7 +103,7 @@ jobs:
         run: |
           cd micropython/ports/rp2
           make clean
-          make BOARD=RPI_PICO_W FROZEN_MANIFEST=pico_w/Gameberry/manifest.py
+          make BOARD=RPI_PICO_W FROZEN_MANIFEST=/home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/manifest.py
 
       - name: Upload Firmware Artifact
         uses: actions/upload-artifact@v3
