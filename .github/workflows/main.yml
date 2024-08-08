@@ -64,6 +64,20 @@ jobs:
           name: minified-files-pico_w
           path: ./pico_w/Gameberry/
 
+      - name: Cache apt
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/cache/apt/archives
+            /var/lib/apt/lists
+          key: ${{ runner.os }}-apt-${{ hashFiles('apt-packages.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Update apt-get
+        run: |
+          sudo apt-get update
+
       - name: Install build dependencies
         run: |
           sudo apt-get update
