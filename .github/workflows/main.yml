@@ -141,4 +141,4 @@ jobs:
         with:
           name: pico_w_uf2
           path: |
-            micropython/ports/rp2/build-PICO_W/firmware.uf2
+            micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
