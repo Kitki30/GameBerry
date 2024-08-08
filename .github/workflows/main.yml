@@ -77,6 +77,7 @@ jobs:
       - name: Update apt-get
         run: |
           sudo apt-get update
+          sudo apt-get upgrade -y
 
       - name: Install build dependencies
         run: |
@@ -102,7 +103,7 @@ jobs:
         run: |
           cd micropython/ports/rp2
           make clean
-          make BOARD=RPI_PICO_W FROZEN_MANIFEST=/pico_w/Gameberry/manifest.py
+          make BOARD=RPI_PICO_W FROZEN_MANIFEST=pico_w/Gameberry/manifest.py
 
       - name: Upload Firmware Artifact
         uses: actions/upload-artifact@v3
