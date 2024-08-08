@@ -3,9 +3,9 @@ import machine
 import gc
 import usocket as socket
 import ujson
-from micropython import const
 
-_ALLOW_TESTS = const(True)
+
+ALLOW_TESTS = const(True)
 
 routes = {}
 
@@ -21,7 +21,8 @@ def handle_request(path, method, body):
         return 'HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\n404 not found.'
 
 def test_h(_):
-    if _ALLOW_TESTS == True:
+    global ALLOW_TESTS
+    if ALLOW_TESTS == True:
         return 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n' + "Test"
 
 
