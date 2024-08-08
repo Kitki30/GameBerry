@@ -74,7 +74,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/micropython/micropython.git
           cd micropython
-          git submodule update --init
+          git submodule update --init --recursive
 
       - name: Build Raspberry Pi Pico W
         run: |
