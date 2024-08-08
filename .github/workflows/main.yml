@@ -73,7 +73,7 @@ jobs:
       - name: Convert data to python
         run: |
            ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/boot_config.json ./pico_w/Gameberry/boot_config.py
-           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/default/settings_default.json ./pico_w/Gameberry/default/settings_default.json
+           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/default/settings_default.json ./pico_w/Gameberry/default/settings_default.py
            ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/translations/pl.json ./pico_w/Gameberry/translations/pl.py
            ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/translations/en.json ./pico_w/Gameberry/translations/en.py
       - name: Upload Artifact
