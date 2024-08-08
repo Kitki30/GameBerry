@@ -5,7 +5,7 @@ import usocket as socket
 import ujson
 
 
-ALLOW_TESTS = const(True)
+ALLOW_TESTS = True
 
 routes = {}
 
