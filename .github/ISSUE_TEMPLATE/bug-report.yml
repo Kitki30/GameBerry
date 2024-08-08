@@ -33,9 +33,9 @@ body:
       required: true
     
   - type: input
-    id: gameberry-version
+    id: micropython-version
     attributes:
-      label: GameBerry version
+      label: Micropython version
       description: |
         Please type the version of micropython that is installed on your microcontroller.
       placeholder: |
