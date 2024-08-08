@@ -8,14 +8,14 @@ freeze(".", "boot.py")
 freeze(".", "voltage_meter_mode.py")
 
 # Boot config:
-include(".", "boot_config.json")
+freeze(".", "boot_config.py")
 
 # Default files:
-include("default", "default/settings_default.json")
+freeze("default", "default/settings_default.py")
 
 # Translations:
-include("translations", "translations/en.json")
-include("translations", "translations/pl.json")
+freeze("translations", "translations/en.py")
+freeze("translations", "translations/pl.py")
 
 # Web Setup:
 freeze("webSetup", "webSetup/webSetup.py")

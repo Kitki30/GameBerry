@@ -69,6 +69,7 @@ if postBypass.value() == 0:
 print("\nAll things working ready to boot!")
 
 # Boot
-boot_config = json.read("/boot_config.json")
+import device_config
+boot_config = json.read_from_string(device_config.data())
 print("Booting "+boot_config["main"]["name"]+" "+boot_config["main"]["file"])
 exec(open(boot_config["main"]["file"]).read())

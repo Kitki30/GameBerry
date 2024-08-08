@@ -13,6 +13,7 @@ import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
 import os
+import default.settings_default
 
 events_working = False
 runEvents = True
@@ -51,7 +52,8 @@ if files.exist("/settings.json"):
 else:
     if files.exist("/default/settings_default.json"):
         try:
-            files.copy("/default/settings_default.json", "/settings.json")
+             with open("/settings.json", "w") as f:
+                 f.write(default.settings_default.data())
         except:
             exceptions.ShowErrorScreen(lcd)
             raise exceptions.FileCopyError("Cannot copy /default/settings_default.json to /settings.json! Cannot boot!")
