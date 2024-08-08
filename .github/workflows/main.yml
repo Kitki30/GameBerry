@@ -77,7 +77,6 @@ jobs:
       - name: Update apt-get
         run: |
           sudo apt-get update
-          sudo apt-get upgrade -y
 
       - name: Install build dependencies
         run: |
