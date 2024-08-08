@@ -36,11 +36,10 @@ jobs:
               elif file.endswith('.py'):
                 print('Minify:', file)
                 with open(full_path, 'r') as f:
-                content = f.read()
+                  content = f.read()
                 minified_content = python_minifier.minify(content)
                 with open(full_path, 'w') as f:
                   f.write(minified_content)
-
           scan_path = './pico_w/Gameberry/'
           handle_folder(scan_path)
           "
