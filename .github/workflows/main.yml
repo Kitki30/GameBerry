@@ -170,6 +170,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
           asset_name: RPI_PICO_W.uf2
+          content_type: application/octet-stream
 
       - uses: eregon/publish-release@v1
         env:
