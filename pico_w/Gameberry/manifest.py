@@ -2,10 +2,11 @@
 # Version 0.8
 # By Kitki30
 
+# boot.py is appended to _boot.py and _boot_fat.py file included in micropython rp2 port.
+# JSON and non .py files are converted to python file and frozen for faster reading.
+
 # Main files:
 freeze(".", "gameberry.py")
-freeze(".", "_boot.py")
-freeze(".", "_boot_fat.py")
 freeze(".", "voltage_meter_mode.py")
 
 # Boot config:
