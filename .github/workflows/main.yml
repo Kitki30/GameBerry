@@ -120,6 +120,15 @@ jobs:
           cd ..
           cd ..
 
+      - name: Add boot.py to _boot.py
+        run: |
+          cd micropython/ports/rp2
+          cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot.py
+          cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot_fat.py
+          cd ..
+          cd ..
+          cd ..
+
       - name: Build Raspberry Pi Pico W
         run: |
           cd micropython/ports/rp2
