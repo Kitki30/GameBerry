@@ -4,17 +4,17 @@ import modules.customExceptions as exceptions
 import network
 import modules.requests as requests
 import gc
-import translations.pl
-import translations.en
 
 translation = None
 
 def load(lang):
     global translation
-    if lang == "pl":
-        translation = json.read_from_string(translations.pl.data())
-    elif lang == "en":
-        translation = json.read_from_string(translations.en.data())
+    translationFile = "/translations/"+lang+".json"
+    if files.exist(translationFile):
+        translation = json.read(translationFile)
+        print("Translation loaded: "+lang+" "+translation["info"]["name"])
+    else:
+        raise exceptions.TranslationNotFound("Translation '"+lang+"' not found!")
 
 def loadExternal(path):
     global translation

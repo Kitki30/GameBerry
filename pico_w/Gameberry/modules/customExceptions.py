@@ -35,3 +35,10 @@ def ShowErrorScreen(lcd):
     lcd.write(2)
     lcd.setCursor(0,1)
     lcd.printout("Connect debugger")
+
+def ShowErrorScreen_with_code(lcd, code):
+    lcd.setRGB(255,0,0)
+    lcd.setCursor(0,0)
+    lcd.write(2)
+    lcd.setCursor(0,1)
+    lcd.printout(code)

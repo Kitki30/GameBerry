@@ -9,12 +9,7 @@ import machine
 import modules.customExceptions
 import modules.blinker as blinker
 import modules.json as json
-import modules.battery as battery
-import rp2
-import sys
-if rp2.bootsel_button() == 1:
-    sys.exit()
-battery.calibrate()
+
 led = machine.Pin("LED", machine.Pin.OUT)
 led.on()
 
@@ -70,7 +65,6 @@ if postBypass.value() == 0:
 print("\nAll things working ready to boot!")
 
 # Boot
-import device_config
-boot_config = json.read_from_string(device_config.data())
+boot_config = json.read_from_string("/device_config.json")
 print("Booting "+boot_config["main"]["name"]+" "+boot_config["main"]["file"])
 exec(open(boot_config["main"]["file"]).read())

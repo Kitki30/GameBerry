@@ -2,18 +2,16 @@ import modules.RGB1602 as RGB1602
 import uos
 import modules.json as json
 import utime as time, utime
-from machine import Pin, PWM, Timer
+from machine import Pin, PWM
 import machine
 import network
 import modules.files as files
 import modules.ntp as ntp
 import modules.time as timezones
-import _thread
 import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
 import os
-import default.settings_default
 
 events_working = False
 runEvents = True
@@ -33,8 +31,6 @@ homestate = 1
 
 safeboot = False
 
-
-
 if home.value() == 0:
     safeboot = True
     while safeboot == True:
@@ -52,13 +48,14 @@ if files.exist("/settings.json"):
 else:
     if files.exist("/default/settings_default.json"):
         try:
-             with open("/settings.json", "w") as f:
-                 f.write(default.settings_default.data())
+             files.copy("/default/settings_default.json", "/settings.json")
+             _temp_lcd_brightness = data.get('lcd_brightness')
+             lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
         except:
-            exceptions.ShowErrorScreen(lcd)
+            exceptions.ShowErrorScreen_with_code(lcd, "file_copy_error")
             raise exceptions.FileCopyError("Cannot copy /default/settings_default.json to /settings.json! Cannot boot!")
     else:
-        exceptions.ShowErrorScreen(lcd)
+        exceptions.ShowErrorScreen_with_code(lcd, "defaults_error")
         raise exceptions.DefaultsNotFound("Default file /default/settings_default.json, not found! Cannot boot!")
 data = json.read("/settings.json")
 
