@@ -4,7 +4,8 @@
 
 # Main files:
 freeze(".", "gameberry.py")
-freeze("_boot.py")
+freeze(".", "_boot.py")
+freeze(".", "_boot_fat.py")
 freeze(".", "voltage_meter_mode.py")
 
 # Boot config:
