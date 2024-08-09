@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5.1.1
@@ -55,7 +55,7 @@ jobs:
     needs: minify
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Minified Files
         uses: actions/download-artifact@v3
@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Minified Files
         uses: actions/download-artifact@v3
@@ -123,8 +123,13 @@ jobs:
       - name: Add boot.py to _boot.py
         run: |
           cd micropython/ports/rp2
+          ls ./modules
+          cat ./modules/_boot.py
+          cat ./modules/_boot_fat.py
           cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot.py
           cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot_fat.py
+          cat ./modules/_boot.py
+          cat ./modules/_boot_fat.py
           cd ..
           cd ..
           cd ..
@@ -141,3 +146,34 @@ jobs:
           name: pico_w_uf2
           path: |
             micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
+
+      - name: Get short commit SHA
+        id: get_short_sha
+        run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.short_sha }}
+          release_name: ${{github.sha}}
+          draft: false
+          prerelease: true
+
+      - uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
+          asset_name: RPI_PICO_W.uf2
+          content_type: application/octet-stream
+
+      - uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
