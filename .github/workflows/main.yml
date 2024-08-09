@@ -147,13 +147,16 @@ jobs:
           path: |
             micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
 
+      - name: Get short commit SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{github.sha.substr(0,7)}}
+          tag_name: ${{github.SHORT_SHA}}
           release_name: ${{github.sha}}
           draft: false
           prerelease: true
