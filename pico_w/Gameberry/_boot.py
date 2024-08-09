@@ -11,8 +11,9 @@ import modules.blinker as blinker
 import modules.json as json
 import modules.battery as battery
 import rp2
+import sys
 if rp2.bootsel_button() == 1:
-    raise Exception("Safe mode")
+    sys.exit()
 battery.calibrate()
 led = machine.Pin("LED", machine.Pin.OUT)
 led.on()
