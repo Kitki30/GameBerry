@@ -1,0 +1,179 @@
+name: Release bot
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  minify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5.1.1
+        
+      - name: Install dependencies
+        run: |
+          pip install python-minifier
+
+      - name: Minify Python files
+        run: |
+          python -c "
+          import os
+          import python_minifier
+            
+          def handle_folder(path):
+            for file in os.listdir(path):
+              full_path = os.path.join(path, file)
+              print('Scan:', file)
+              if os.path.isdir(full_path):
+                print('called with:', file)
+                handle_folder(full_path)
+              elif file.endswith('.py'):
+                print('Minify:', file)
+                with open(full_path, 'r') as f:
+                  content = f.read()
+                minified_content = python_minifier.minify(content)
+                with open(full_path, 'w') as f:
+                  f.write(minified_content)
+          scan_path = './pico_w/Gameberry/'
+          handle_folder(scan_path)
+          "
+
+      - name: Upload Minified Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: minified-files-pico_w
+          path: ./pico_w/Gameberry/
+
+  json-to-python:
+    runs-on: ubuntu-latest
+    needs: minify
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Minified Files
+        uses: actions/download-artifact@v3
+        with:
+          name: minified-files-pico_w
+          path: ./pico_w/Gameberry/
+
+      - name: Setup Python
+        uses: actions/setup-python@v5.1.1
+
+      - name: Clone micropython_data_to_py
+        run: |
+          git clone https://github.com/peterhinch/micropython_data_to_py.git
+
+      - name: Convert data to python
+        run: |
+           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/boot_config.json ./pico_w/Gameberry/boot_config.py
+           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/default/settings_default.json ./pico_w/Gameberry/default/settings_default.py
+           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/translations/pl.json ./pico_w/Gameberry/translations/pl.py
+           ./micropython_data_to_py/data_to_py.py ./pico_w/Gameberry/translations/en.json ./pico_w/Gameberry/translations/en.py
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: converted-files-pico_w
+          path: |
+            ./pico_w/Gameberry/
+  build:
+    runs-on: ubuntu-latest
+    needs: json-to-python
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Minified Files
+        uses: actions/download-artifact@v3
+        with:
+          name: converted-files-pico_w
+          path: ./pico_w/Gameberry/
+
+      - name: Update apt-get
+        run: |
+          sudo apt-get update
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential python3 python3-pip libffi-dev pkg-config
+          pip3 install pyparsing
+
+      - name: Clone MicroPython
+        run: |
+          git clone --depth 1 https://github.com/micropython/micropython.git
+          cd micropython
+          git submodule update --init --recursive
+
+      - name: Build mpy-cross
+        run: |
+          cd micropython/mpy-cross
+          make clean
+          make
+          cd ..
+          cd ..
+
+      - name: Add boot.py to _boot.py
+        run: |
+          cd micropython/ports/rp2
+          ls ./modules
+          cat ./modules/_boot.py
+          cat ./modules/_boot_fat.py
+          cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot.py
+          cat /home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/boot.py >> ./modules/_boot_fat.py
+          cat ./modules/_boot.py
+          cat ./modules/_boot_fat.py
+          cd ..
+          cd ..
+          cd ..
+
+      - name: Build Raspberry Pi Pico W
+        run: |
+          cd micropython/ports/rp2
+          make clean
+          make BOARD=RPI_PICO_W FROZEN_MANIFEST=/home/runner/work/GameBerry/GameBerry/pico_w/Gameberry/manifest.py
+
+      - name: Upload Firmware Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pico_w_uf2
+          path: |
+            micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
+
+      - name: Get short commit SHA
+        id: get_short_sha
+        run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.short_sha }}
+          release_name: ${{github.sha}}
+          draft: false
+          prerelease: true
+
+      - uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: micropython/ports/rp2/build-RPI_PICO_W/firmware.uf2
+          asset_name: RPI_PICO_W.uf2
+          content_type: application/octet-stream
+
+      - uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}

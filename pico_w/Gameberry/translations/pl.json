@@ -1,0 +1,39 @@
+{
+    "info": {
+        "name": "Polski",
+        "author": "Kitki30",
+        "description": "Język polski dla GameBerry. Nie ma polskich znaków ponieważ ekran LCD1602 ich nie obsługuje!",
+        "compatible_with": 0.6,
+        "version": 1.0
+    },
+    "translation": {
+        "debugger": {
+            "gameberry_on": "na",
+            "machine_freq": "Częstotliwość procesora",
+            "settings_exist": "Ustawienia istnieją!",
+            "savedata_exist": "Dane zapisów instnieją!",
+            "waiting_one_second": "Czekam jendą sekunde!"
+        },
+        "wifi": {
+            "connecting_to": "Laczenie z",
+            "connection_fail": "Blad laczenia",
+            "ap_not_found": "AP nie znalez.",
+            "wrong_password": "Zle haslo"
+        },
+        "global": {
+            "settings": "Ustawienia",
+            "game": "Gra",
+            "error": "Blad",
+            "exit": "Wyjdz"
+        },
+        "rtc": {
+            "debugger_rtc": "Synchronizacja RTC...",
+            "setting_clock": "Ustawiam zegar.."
+        },
+        "menu": {
+            "play_next": "1. Graj 2. Nast.",
+            "ok_next": "1. OK   2. Nast.",
+            "exit_next": "1. OK   2. Nast."
+        }
+    }
+}
