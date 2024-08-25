@@ -796,8 +796,6 @@ while True:
             settings1()
         elif currentMenu == 15:
             settings5()
-        elif currentMenu == 31:
-            update()
         elif currentMenu == 17:
             print("Entering bootloader(BOOTSEL)")
             lcd.clear()
@@ -833,6 +831,8 @@ while True:
             settings_buzzer_volume_selection()
         elif currentMenu == 30:
             OctoPrint()
+        elif currentMenu == 31:
+            update()
     elif button1.value() == 1 and button1state == 0:
         print("Button state updated")
         button1state = 1
@@ -876,11 +876,9 @@ while True:
         elif currentMenu == 17:
             settings3()
         elif currentMenu == 16:
-            settings6()
-        elif currentMenu == 31:
-            settings4()
+            settings3()
         elif currentMenu == 15:
-            settings6()
+            settings4()
         elif currentMenu == 18:
             settings_buzzer()
         elif currentMenu == 19:
@@ -893,6 +891,8 @@ while True:
             json.write("/settings.json", data)
             settings_display_brightness_selector()
         elif currentMenu == 22:
+            settings6()
+        elif currentMenu == 31:
             settings2()
         elif currentMenu == 23:
             settings_buzzer_back()
