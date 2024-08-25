@@ -1,4 +1,5 @@
 # Don't change anything under than line unless you know what you are doing!
+print("Running")
 
 # Download list URL
 download_list_url = "https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/download_list.txt"
@@ -204,7 +205,10 @@ while is_end == False:
             line = line + 1
             read = readline(line, download_list_path)
             log("Creating folder: " + read)
-            os.mkdir("/" + read)
+            if exist("/"+read):
+                print("Folder exists!")
+            else:
+                os.mkdir("/" + read)
             log("Created folder")
             print("Created folder: " + read)
         elif read == "download":

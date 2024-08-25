@@ -1,5 +1,4 @@
 import _thread
-import gc
 import time
 import modules.json as json
 import ujson
