@@ -244,11 +244,9 @@ def play():
         temp_lcd_brightness = data.get('lcd_brightness')
         lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
         lcd.setCursor(0,0)
-        lcd.printout("Game not found")
-        lcd.setCursor(0,1)
-        lcd.printout("Rebooting...")
-        time.sleep(1)
-        reset()
+        lcd.printout("Game not found!")
+        time.sleep(2.5)
+        main()
 
 def reset():
     print("Soft reset process started...")

@@ -32,6 +32,7 @@ def exist(filename):
 if exist("/system/temp"):
     print("")
 else:
+    print("Making folder")
     os.mkdir("/system")
     os.mkdir("/system/temp")
 
@@ -110,10 +111,9 @@ def variables(text):
 def writeInstallConfig():
     write_json("/install_conf.json", ujson.dumps({"download_list": download_list_url, "log_path": log_path, "flash_format": force_not_to_format_flash}))
     
+print("Reading config")
 data = read_json("/settings.json")
 
-if log_path in os.listdir():
-        os.remove(log_path)
 log("Starting installer")
 log("Machine name: "+str(uos.uname().machine))
 print("Machine name: "+str(uos.uname().machine))
