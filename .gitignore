@@ -5,6 +5,7 @@ settings.json
 __pycache__
 extensions.json
 octoprint-config.json
+*/system/temp
 # =========================
 # Windows detritus
 # =========================
