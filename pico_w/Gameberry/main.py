@@ -13,6 +13,7 @@ import modules.blinker as blinker
 import modules.json as json
 import modules.files as files
 import time
+import os
 
 led = machine.Pin("LED", machine.Pin.OUT)
 led.on()
@@ -43,6 +44,9 @@ if postBypass.value() == 0:
         print("Flash memory - Broken")
         blinker.blink(4, 0.25)
         raise modules.customExceptions.FileReadWriteError("Error happened when reading/writing to flash memory!\nError:\n"+str(exception))
+    
+if files.exist("/boot.py"):
+    os.remove("boot.py")
 
 # LCD
 if postBypass.value() == 0:
@@ -101,10 +105,9 @@ else:
     time.sleep(0.1)
     buzzer.duty_u16(0)
     time.sleep(0.1)
-    if files.exist(boot_config["recovery"]["file"]):
-        print("Booting recovery...")
-        boot_config = json.read_from_string("/device_config.json")
-        exec(open(boot_config["recovery"]["file"]).read())
+    if files.exist("/system/temp/update.py"):
+        print("Booting update file...")
+        exec(open("/system/temp/update.py").read())
     else:
         buzzer.duty_u16(2000)
         buzzer.freq(600)

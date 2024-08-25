@@ -1,0 +1,5 @@
+{
+    "version": 0.9,
+    "device": "rp2",
+    "_comment": "Version info file, please don't delete or your device will not boot!"
+}

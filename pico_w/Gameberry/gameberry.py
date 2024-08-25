@@ -11,11 +11,14 @@ import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
 import os
+import modules.requests as requests
 
 events_working = False
 runEvents = True
 
-version = 0.8
+version_info = json.read("/version_info.json")
+
+version = version_info["version"]
 
 gc.collect()
 
@@ -62,7 +65,7 @@ translation.load(data["language"])
 # Gameberry logo
 timeFormatted = utime.localtime(timezones.get_timezoned())
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-print("GameBerry v"+str(version)+" "+ translation.get("debugger", "gameberry_on") +" "+ uos.uname().machine) # Gameberry v{version} on {machine name}
+print("GameBerry v"+str(version)+" for "+ version_info["device"] + " " + translation.get("debugger", "gameberry_on") +" "+ uos.uname().machine) # Gameberry v{version} on {machine name}
 print(translation.get("debugger", "machine_freq")+": "+str(machine.freq() / 1000000)+" Mhz") # Machine frequency: {freq}Mhz
 print(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0])+" "+str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
@@ -411,6 +414,18 @@ def settings5():
     lcd.setCursor(0,1)
     lcd.printout("1. Yes     2. No")
     print("Current menu: "+str(currentMenu))
+    
+def settings6():
+    global currentMenu
+    currentMenu = 31
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("Update")
+    lcd.setCursor(0,1)
+    lcd.printout("1. OK    2. Next")
+    print("Current menu: "+str(currentMenu))
 
 def exit1():
     gc.collect()
@@ -670,6 +685,59 @@ def OctoPrint():
         time.sleep(1)
         main()
 
+def update():
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("Checking for")
+    lcd.setCursor(0,1)
+    lcd.printout("update...")
+    if wlan.isconnected() == False:
+        lcd.clear()
+        _temp_lcd_brightness = data.get('lcd_brightness')
+        lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+        lcd.setCursor(0,0)
+        lcd.printout("No wi-fi")
+        lcd.setCursor(0,1)
+        lcd.printout("connection")
+        time.sleep(2.5)
+        main()
+    print("Downloading version file")
+    requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/version_info.json", "/system/temp/version_info.json")
+    version_info_temp = json.read("/system/temp/version_info.json")
+    if version_info["version"] >= version_info_temp["version"]:
+        lcd.clear()
+        _temp_lcd_brightness = data.get('lcd_brightness')
+        lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+        lcd.setCursor(0,0)
+        lcd.printout("No need to")
+        lcd.setCursor(0,1)
+        lcd.printout("update!")
+        time.sleep(2.5)
+        main()
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("Downloading")
+    lcd.setCursor(0,1)
+    lcd.printout("update...")
+    print("Downloading update file")
+    requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/update.py", "/system/temp/update.py")
+    print("Downloading boot.py for update file...")
+    requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/boot_py_update.py", "/boot.py")
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("Installing")
+    lcd.setCursor(0,1)
+    lcd.printout("update...")
+    machine.reset()
+    
+    
+
 # Sync clock
 if wlan.isconnected() == True:
     print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
@@ -728,6 +796,8 @@ while True:
             settings1()
         elif currentMenu == 15:
             settings5()
+        elif currentMenu == 31:
+            update()
         elif currentMenu == 17:
             print("Entering bootloader(BOOTSEL)")
             lcd.clear()
@@ -806,9 +876,11 @@ while True:
         elif currentMenu == 17:
             settings3()
         elif currentMenu == 16:
-            settings3()
-        elif currentMenu == 15:
+            settings6()
+        elif currentMenu == 31:
             settings4()
+        elif currentMenu == 15:
+            settings6()
         elif currentMenu == 18:
             settings_buzzer()
         elif currentMenu == 19:

@@ -1,5 +1,5 @@
 Kitki30-Gameberry-Download-List-File
-version 1.0
+version 0.9
 START
 message
 Welcome to Gameberry Download List File
@@ -14,6 +14,9 @@ time
 log-message
 ------ Installation started ------
 create-device-config
+download
+version_info.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/version_info.json
 download
 main.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/main.py

@@ -1,13 +1,3 @@
-# Change settings here
-
-# Set your Wifi here
-WiFi_SSID = ""
-WiFi_PASSWORD = ""
-
-# Set gameberry device config here
-INA219 = True
-SD_READER = True
-
 # Don't change anything under than line unless you know what you are doing!
 
 # Download list URL
@@ -15,10 +5,10 @@ download_list_url = "https://raw.githubusercontent.com/Kitki30/GameBerry/main/pi
 download_list_path = "/system/temp/list.txt"
 
 # Force not to format flash
-force_not_to_format_flash = False
+force_not_to_format_flash = True
 
 # Log Path
-log_path = "/system/temp/install_log.log"
+log_path = "/system/temp/update_log.log"
 
 # Imports
 import ujson
@@ -29,6 +19,7 @@ import time
 import os
 import uos
 import machine
+import sys
 
 def exist(filename):
     try:
@@ -117,39 +108,20 @@ def variables(text):
 
 def writeInstallConfig():
     write_json("/install_conf.json", ujson.dumps({"download_list": download_list_url, "log_path": log_path, "flash_format": force_not_to_format_flash}))
+    
+data = read_json("/settings.json")
 
 if log_path in os.listdir():
         os.remove(log_path)
 log("Starting installer")
 log("Machine name: "+str(uos.uname().machine))
 print("Machine name: "+str(uos.uname().machine))
-print("\033[94mWelcome to GameBerry installer by Kitki30\033[0m")
-time.sleep(0.1)
-log("Showing warning")
-print("")
-print("\033[91mWARNING: THIS INSTALLER WILL DELETE EVERY FILE ON\033[0m")
-print("\033[91mDEVICES STORAGE EVEN IF INSTALLATION IS FAILED\033[0m")
-print("\033[91mPLEASE STOP THE INSTALLER USING STOP BUTTON\033[0m")
-print("\033[91mIN THONNY TO ABORT INSTALLER AND NOT INSTALL\033[0m")
-print("\033[91mGAMEBERRY ON YOUR DEVICE I'M ALSO NOT RESPONSIBLE\033[0m")
-print("\033[91mFOR ANY BRICKS OF YOUR DEVICES OR LOST DATA\033[0m")
-log("Waiting 5 seconds for user to read...")
-time.sleep(5)
-print("")
-log("Config:")
-print("Config:")
-log("Wi-Fi SSID: "+WiFi_SSID)
-print("WiFi SSID: "+WiFi_SSID)
-log("INA219: "+ str(INA219))
-print("INA219: "+str(INA219))
-log("SD READER: "+str(SD_READER))
-print("SD READER: " + str(SD_READER))
-print("")
+print("\033[94mWelcome to GameBerry updater by Kitki30\033[0m")
 log("Connecting to Wi-Fi")
 print("Connecting to the Wi-Fi...")
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
-wlan.connect(WiFi_SSID, WiFi_PASSWORD)
+wlan.connect(data.get("Wi-Fi").get("wifi_ssid"), data.get("Wi-Fi").get("wifi_password"))
 wifi_i = 0
 while wlan.isconnected() == False and wifi_i is not 30:
     time.sleep(1)
@@ -225,11 +197,7 @@ while is_end == False:
                 print("Please stop the script if waiting more than 15 seconds for starting")
                 print("Then report as issue on Github")
     if is_started == True:
-        if read == "create-device-config":
-            log("Creating device config...")
-            print("Writing device config...")
-            write_device_config(INA219, SD_READER)
-        elif read == "folder":
+        if read == "folder":
             log("Creating folder...")
             print("Creating folder...")
             log("Reading folder name to be created...")
@@ -305,8 +273,20 @@ while is_end == False:
             is_end = True
     line = line + 1
 os.remove(download_list_path)
-print("\033[92mInstalation successfull\033[0m")
+print("\033[92mUpdate successfull\033[0m")
 print("Rebooting...")
-machine.soft_reset()
+try:
+    z=42/0
+except Exception as e:
+    from io import StringIO
+    s=StringIO()
+    sys.print_exception(e, s)
+    sv = s.getvalue()
+    if sv.find("<stdin>") >= 0:
+        print("Running from REPL doing Soft Reset")
+        machine.soft_reset()
+    else:
+        print("Running from file")
+        machine.reset()
 
 # By Kitki30
