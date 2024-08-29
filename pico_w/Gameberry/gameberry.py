@@ -751,7 +751,7 @@ main()
 
 while True:
 
-    if button1.value() == 0! and button1state == 1:
+    if button1.value() == 0 and button1state == 1:
         button1state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
