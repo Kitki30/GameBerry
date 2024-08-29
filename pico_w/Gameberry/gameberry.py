@@ -700,6 +700,7 @@ def update():
         lcd.printout(translation.get("update", "no_wifi_2")) # connection
         time.sleep(2.5)
         main()
+        return
     print(translation.get("update", "debug_down_ver_file")) # Downloading version file
     requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/version_info.json", "/system/temp/version_info.json")
     version_info_temp = json.read("/system/temp/version_info.json")
@@ -713,6 +714,7 @@ def update():
         lcd.printout(translation.get("update", "no_need_2")) # update!
         time.sleep(2.5)
         main()
+        return
     lcd.clear()
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
