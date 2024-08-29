@@ -9,7 +9,7 @@ def load(lang):
     translationFile = "/translations/"+lang+".json"
     if files.exist(translationFile):
         translation = json.read(translationFile)
-        print("Translation loaded: "+lang+" "+translation["info"]["name"])
+        print(translation["translation"]["translations"]["translation_loaded"]+lang+" "+translation["info"]["name"])
     else:
         raise exceptions.TranslationNotFound("Translation '"+lang+"' not found!")
 

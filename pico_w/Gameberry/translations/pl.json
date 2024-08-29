@@ -3,8 +3,8 @@
         "name": "Polski",
         "author": "Kitki30",
         "description": "Język polski dla GameBerry. Nie ma polskich znaków ponieważ ekran LCD1602 ich nie obsługuje!",
-        "compatible_with": 0.6,
-        "version": 1.0
+        "compatible_with": 0.93,
+        "version": 2
     },
     "translation": {
         "debugger": {
@@ -12,28 +12,83 @@
             "machine_freq": "Częstotliwość procesora",
             "settings_exist": "Ustawienia istnieją!",
             "savedata_exist": "Dane zapisów instnieją!",
-            "waiting_one_second": "Czekam jendą sekunde!"
+            "waiting_one_second": "Czekam jendą sekunde!",
+            "play_gc_col": "Wyczyszczono śmieci!",
+            "play_imported": "Gra zaimportowana, włączam...",
+            "play_imp_err": "Błąd importowania gry: ",
+            "curr_menu": "Wybrane menu: ",
+            "reset_start": "Proces restartu wystartował!",
+            "reset_pwr_led": "Wyłączanie leda zasilania",
+            "rebooting": "Restartowanie...",
+            "prepare_shutdown": "Przygotowywanie do wyłączenia...",
+            "connecting_to_wlan": "Łączenie z wifi...",
+            "button_state": "Button state updated",
+            "entering_bootloader": "Entering bootloader(BOOTSEL)"
         },
         "wifi": {
             "connecting_to": "Laczenie z",
             "connection_fail": "Blad laczenia",
             "ap_not_found": "AP nie znalez.",
-            "wrong_password": "Zle haslo"
+            "wrong_password": "Zle haslo",
+            "connect": "Polacz",
+            "disconnect": "Rozlacz",
+            "connection_failed": "Connection failed!"
         },
         "global": {
             "settings": "Ustawienia",
             "game": "Gra",
             "error": "Blad",
-            "exit": "Wyjdz"
+            "exit": "Wyjdz",
+            "apps": "Aplikacje",
+            "loading": "Ladowanie...",
+            "please_install": "Zainstaluj"
+        },
+        "apps": {
+            "app_wifi": "Wi-Fi",
+            "app_what_time": "Zegar"
         },
         "rtc": {
             "debugger_rtc": "Synchronizacja RTC...",
             "setting_clock": "Ustawiam zegar.."
         },
         "menu": {
+            "back_next": "1. Wyjdz 2. Nast",
             "play_next": "1. Graj 2. Nast.",
             "ok_next": "1. OK   2. Nast.",
-            "exit_next": "1. OK   2. Nast."
+            "exit_next": "1. OK   2. Nast.",
+            "yes_no": "1. Tak    2. Nie",
+            "next": "        2. Nast.",
+            "play_not_f": "Game not found!",
+            "back": "Wstecz"
+        },
+        "settings": {
+            "machine": "Maszyna",
+            "display": "Ekran",
+            "brightness": "Jasnosc",
+            "buzzer": "Buzzer",
+            "volume": "Glosnosc",
+            "bootloader": "Bootloader",
+            "enter_bootloader": "Wejsc Bootloader",
+            "update": "Aktualizuj",
+            "entering_boot_1": "Entering",
+            "entering_boot_2": "bootloader..."
+        },
+        "update":{
+            "check_1": "Sprawdzam",
+            "check_2": "aktualizacje...",
+            "no_wifi_1": "Brak polaczenia",
+            "no_wifi_2": "z Wi-Fi!",
+            "debug_down_ver_file": "Pobieranie pliku wersji",
+            "no_need_1": "Nie trzeba",
+            "no_need_2": "aktualizowac!",
+            "downloading_1": "Pobieranie",
+            "downloading_2": "aktualizacji...",
+            "debug_down_update": "Pobieranie pliku aktualizacji",
+            "install_1": "Instalowanie",
+            "install_2": "aktualizacji..."
+        },
+        "translations":{
+            "translation_loaded": "Tłumaczenie załadowane: "
         }
     }
 }

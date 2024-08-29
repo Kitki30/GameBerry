@@ -3,8 +3,8 @@
         "name": "English",
         "author": "Kitki30",
         "description": "Default GameBerry Language.",
-        "compatible_with": 0.6,
-        "version": 1.2
+        "compatible_with": 0.93,
+        "version": 2
     },
     "translation": {
         "debugger": {
@@ -12,19 +12,40 @@
             "machine_freq": "Machine frequency",
             "settings_exist": "Settings exist!",
             "savedata_exist": "Savedata exist!",
-            "waiting_one_second": "Waiting one second"
+            "waiting_one_second": "Waiting one second",
+            "play_gc_col": "Cleaned garbage!",
+            "play_imported": "Game imported, launching...",
+            "play_imp_err": "Failed to import the game:",
+            "curr_menu": "Current menu: ",
+            "reset_start": "Soft reset process started!",
+            "reset_pwr_led": "Disabling power led",
+            "rebooting": "Rebooting...",
+            "prepare_shutdown": "Prepairing to shutdown...",
+            "connecting_to_wlan": "Connecting to wlan...",
+            "button_state": "Button state updated",
+            "entering_bootloader": "Entering bootloader(BOOTSEL)"
         },
         "wifi": {
             "connecting_to": "Connecting to",
             "connection_fail": "Connection Fail",
             "ap_not_found": "AP not found",
-            "wrong_password": "Wrong password"
+            "wrong_password": "Wrong password",
+            "connect": "Connect",
+            "disconnect": "Disconnect",
+            "connection_failed": "Connection failed!"
         },
         "global": {
             "settings": "Settings",
             "game": "Game",
             "error": "Error",
-            "exit": "Exit"
+            "exit": "Exit",
+            "apps": "Apps",
+            "loading": "Loading...",
+            "please_install": "Please install"
+        },
+        "apps": {
+            "app_wifi": "Wi-Fi",
+            "app_what_time": "What time is it?"
         },
         "rtc": {
             "debugger_rtc": "Sync rtc clock...",
@@ -33,7 +54,41 @@
         "menu": {
             "play_next": "1. Play  2. Next",
             "ok_next": "1. OK    2. Next",
-            "exit_next": "1. Exit  2. Next"
+            "exit_next": "1. Exit  2. Next",
+            "yes_no": "1. Yes     2. No",
+            "back_next": "1. Back  2. Next",
+            "next": "         2. Next",
+            "play_not_f": "Game not found!",
+            "back": "Back"
+        },
+        "settings": {
+            "machine": "Machine",
+            "display": "Display",
+            "brightness": "Brightness",
+            "buzzer": "Buzzer",
+            "volume": "Volume",
+            "bootloader": "Bootloader",
+            "enter_bootloader": "Enter Bootloader?",
+            "update": "Update",
+            "entering_boot_1": "Entering",
+            "entering_boot_2": "bootloader..."
+        },
+        "update":{
+            "check_1": "Checking for",
+            "check_2": "update...",
+            "no_wifi_1": "No Wi-Fi",
+            "no_wifi_2": "connection",
+            "debug_down_ver_file": "Downloading version file",
+            "no_need_1": "No need to",
+            "no_need_2": "update!",
+            "downloading_1": "Downloading",
+            "downloading_2": "update...",
+            "debug_down_update": "Downloading update file",
+            "install_1": "Installing",
+            "install_2": "update..."
+        },
+        "translations":{
+            "translation_loaded": "Translation loaded: "
         }
     }
 }

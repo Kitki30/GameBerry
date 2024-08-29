@@ -16,10 +16,6 @@ import modules.requests as requests
 events_working = False
 runEvents = True
 
-version_info = json.read("/version_info.json")
-
-version = version_info["version"]
-
 gc.collect()
 
 
@@ -41,6 +37,10 @@ if home.value() == 0:
         if button1.value() == 0:
             safeboot = False
         time.sleep(5)
+
+version_info = json.read("/version_info.json")
+
+version = version_info["version"]
 
 lcd=RGB1602.RGB1602(16,2)
 lcd.clear()
@@ -198,7 +198,7 @@ def main():
         lcd.printout(translation.get("global", "game")) # Game
     lcd.setCursor(0,1)
     lcd.printout(translation.get("menu", "play_next")) # 1. Play  2. Next
-    print("Current menu: "+str(currentMenu))
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 # Settings menu
 def settings():
@@ -211,7 +211,7 @@ def settings():
     lcd.printout(translation.get("global", "settings")) # Settings
     lcd.setCursor(0,1)
     lcd.printout(translation.get("menu", "ok_next")) # 1. OK    2. Next
-    print("Current menu: "+str(currentMenu))
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 # Exit
 def exit():
@@ -224,37 +224,36 @@ def exit():
     lcd.printout(translation.get("global", "exit")) # Exit
     lcd.setCursor(0,1)
     lcd.printout(translation.get("menu", "exit_next")) # 1. Exit  2. Next
-    print("Current menu: "+str(currentMenu))
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def play():
     try:
         ram = gc.mem_free() / 1024
         gc.collect()
-        print("Cleaned garbage!!!")
+        print(translation.get("debugger", "play_gc_col")) # Cleaned garbage!
         print(str((gc.mem_free() / 1024)) + "KB Ram free" + " was "+str(ram)+"KB")
         import game.game as game
-        print("Game imported, launching...")
+        print(translation.get("debugger", "play_imported")) # Game imported, launching..."
         lcd.clear()
         game.run(wlan, lcd)
-        machine.reset()
+        main()
     except ImportError as e:
-        print(f"Failed to import the game: {e}")
-        print("Rebooting")
+        print(f"{translation.get("debugger", "play_imp_err")} {e}") # Failed to import the game:
         lcd.clear()
         temp_lcd_brightness = data.get('lcd_brightness')
         lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
         lcd.setCursor(0,0)
-        lcd.printout("Game not found!")
+        lcd.printout(translation.get("menu", "play_not_f")) # Game not found!
         time.sleep(2.5)
         main()
 
 def reset():
-    print("Soft reset process started...")
-    print("Disabling power led")
+    print(translation.get("debugger", "reset_start")) # Soft reset process started!
+    print(translation.get("debugger", "reset_pwr_led")) # Disabling power led
     led.off()
     lcd.setRGB(0,0,0)
     lcd.clear()
-    print("Rebooting...")
+    print(translation.get("debugger", "rebooting")) # Rebooting...
     machine.soft_reset()
 
 def settings1():
@@ -264,10 +263,10 @@ def settings1():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Machine")
+    lcd.printout(translation.get("settings", "machine")) # Machine
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_display():
     global currentMenu
@@ -276,10 +275,10 @@ def settings_display():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Display")
+    lcd.printout(translation.get("settings", "display")) # Display
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_display_brightness_selector():
     global currentMenu
@@ -291,7 +290,7 @@ def settings_display_brightness_selector():
     lcd.printout(str(data.get('lcd_brightness')))
     lcd.setCursor(0,1)
     lcd.printout("1. +        2. -")
-    print("Current menu: "+str(currentMenu))
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_display_brightness():
     global currentMenu
@@ -300,10 +299,10 @@ def settings_display_brightness():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Brightness")
+    lcd.printout(translation.get("settings", "brightness")) # Brightness
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_display_back():
     global currentMenu
@@ -312,10 +311,10 @@ def settings_display_back():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_buzzer():
     global currentMenu
@@ -324,10 +323,10 @@ def settings_buzzer():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Buzzer")
+    lcd.printout(translation.get("settings", "buzzer")) # Buzzer
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_buzzer_volume():
     global currentMenu
@@ -336,10 +335,10 @@ def settings_buzzer_volume():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Volume")
+    lcd.printout(translation.get("settings", "volume")) # Volume
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_buzzer_volume_selection():
     global currentMenu
@@ -351,7 +350,7 @@ def settings_buzzer_volume_selection():
     lcd.printout(str(data.get('buzzer_volume')))
     lcd.setCursor(0,1)
     lcd.printout("1. +        2. -")
-    print("Current menu: "+str(currentMenu))  
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings_buzzer_back():
     global currentMenu
@@ -360,10 +359,10 @@ def settings_buzzer_back():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu)) 
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings2():
     global currentMenu
@@ -372,10 +371,10 @@ def settings2():
     temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings3():
     global currentMenu
@@ -384,10 +383,10 @@ def settings3():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Bootloader")
+    lcd.printout(translation.get("setttings", "bootloader")) # Bootloader
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings4():
     global currentMenu
@@ -396,10 +395,10 @@ def settings4():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def settings5():
     global currentMenu
@@ -408,10 +407,10 @@ def settings5():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Enter Bootloader")
+    lcd.printout(translation.get("settings", "enter_bootloader")) # Enter bootloader
     lcd.setCursor(0,1)
-    lcd.printout("1. Yes     2. No")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "yes_no")) # 1. Yes 2. No
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
     
 def settings6():
     global currentMenu
@@ -420,14 +419,14 @@ def settings6():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Update")
+    lcd.printout(translation.get("settings", "update")) # Update
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def exit1():
     gc.collect()
-    print("Prepairing to shutdown...")
+    print(translation.get("debugger", "prepare_shutdown")) # Pepairing to shutdown...
     global currentMenu
     currentMenu = 4
     wlan.disconnect()
@@ -453,10 +452,10 @@ def apps1():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Apps")
+    lcd.printout(translation.get("global", "apps")) # Apps
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def apps():
     global currentMenu
@@ -465,10 +464,10 @@ def apps():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Wi-Fi")
+    lcd.printout(translation.get("apps", "app_wifi")) # Wi-Fi
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def appsExit():
     global currentMenu
@@ -477,10 +476,10 @@ def appsExit():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def time1():
     global currentMenu
@@ -489,10 +488,10 @@ def time1():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("What time is it?")
+    lcd.printout(translation.get("apps", "app_what_time")) # What time is it?
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def whatTimeIsIt1():
     global currentMenu
@@ -505,8 +504,8 @@ def whatTimeIsIt1():
 
     lcd.printout(str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
     lcd.setCursor(0,1)
-    lcd.printout("         2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "next")) # 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)  
 
 def whatTimeIsIt2():
     global currentMenu
@@ -518,8 +517,8 @@ def whatTimeIsIt2():
     timeFormatted = utime.localtime(timezones.get_timezoned())
     lcd.printout(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0]))
     lcd.setCursor(0,1)
-    lcd.printout("         2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "next")) # 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
     
 
 def whatTimeIsIt3():
@@ -529,10 +528,10 @@ def whatTimeIsIt3():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Back")
+    lcd.printout(translation.get("menu", "back")) # Back
     lcd.setCursor(0,1)
-    lcd.printout("1. Back  2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def wifi():
     global currentMenu
@@ -546,8 +545,8 @@ def wifi():
     else:
         lcd.printout(data.get("Wi-Fi").get("wifi_ssid"))
     lcd.setCursor(0,1)
-    lcd.printout("1. Back  2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "back_next"))
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def wifiConnect():
     global currentMenu
@@ -557,19 +556,19 @@ def wifiConnect():
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
     if wlan.isconnected() == False:
-        lcd.printout("Connect")
+        lcd.printout(translation.get("wifi", "connect")) # Connect
     else:
-        lcd.printout("Disconnect")
+        lcd.printout(translation.get("wifi", "disconnect")) # Disconnect
     lcd.setCursor(0,1)
-    lcd.printout("1. OK    2. Next")
-    print("Current menu: "+str(currentMenu))
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu)
 
 def connect():
-    print("Connecting to wlan...")
+    print(translation.get("debugger", "connecting_to_wlan")) # Conntecting to wlan...
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Connecting to")
+    lcd.printout(translation.get("wifi", "connecting_to")) # Connecting to
     lcd.setCursor(0,1)
     if len(data.get("Wi-Fi").get("wifi_ssid")) > 16:
         lcd.printout("Wi-Fi")
@@ -579,7 +578,7 @@ def connect():
     wlan.active(True)
     wlan.connect(data.get("Wi-Fi").get("wifi_ssid"), data.get("Wi-Fi").get("wifi_password"))
     lcd.setCursor(0,0)
-    lcd.printout("Connecting to")
+    lcd.printout(translation.get("wifi", "connecting_to")) # Connecting to
     lcd.setCursor(0,1)
     if len(data.get("Wi-Fi").get("wifi_ssid")) > 16:
         lcd.printout("Wi-Fi")
@@ -591,25 +590,25 @@ def connect():
         if wlan.status() == -1:
             lcd.clear()
             lcd.setCursor(0,0)
-            lcd.printout("Error")
+            lcd.printout(translation.get("global", "error")) # Error
             lcd.setCursor(0,1)
-            lcd.printout("Connection Fail")
+            lcd.printout(translation.get("wifi", "connecction_fail")) # Connection fail
             connectBlock = True
             time.sleep(1)
         elif wlan.status() == -2:
             lcd.clear()
             lcd.setCursor(0,0)
-            lcd.printout("Error")
+            lcd.printout(translation.get("global", "error")) # Error
             lcd.setCursor(0,1)
-            lcd.printout("AP not found")
+            lcd.printout(translation.get("wifi", "ap_not_found")) # AP not found
             connectBlock = True
             time.sleep(1)
         elif wlan.status() == -3:
             lcd.clear()
             lcd.setCursor(0,0)
-            lcd.printout("Error")
+            lcd.printout(translation.get("global", "error")) # Error
             lcd.setCursor(0,1)
-            lcd.printout("Wrong password")
+            lcd.printout(translation.get("wifi", "wrong_password")) # Wrong password
             connectBlock = True
             time.sleep(1)
         wifiChecks = wifiChecks + 1
@@ -621,15 +620,15 @@ def connect():
     if wlan.isconnected() == False:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Connection failed!")
-        print("Connection failed")
+        lcd.printout(translation.get("wifi", "connection_failed")) # Connection failed!
+        print(translation.get("wifi", "connection_failed")) # Connection failed!
         time.sleep(1)
 
     # Sync clock
     if wlan.isconnected() == True and timeFormatted[0] < 2024:
-        print("Sync rtc clock..")
+        print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
         lcd.clear()
-        lcd.printout("Setting clock...")
+        lcd.printout(translation.get("rtc", "setting_clock")) # Settings clock...
         ntp.sync(wlan)
 
 def OctoPrint1():
@@ -641,13 +640,13 @@ def OctoPrint1():
     lcd.setCursor(0,0)
     lcd.printout("OctoPrint")
     lcd.setCursor(0,1)
-    lcd.printout("1. OK  2. Next")
-    print("Current menu: "+str(currentMenu))  
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu) 
 
 def OctoPrint():
     lcd.clear()
     lcd.setCursor(0,0)
-    lcd.printout("Loading...")
+    lcd.printout(translation.get("global", "loading")) # Loading...
     lcd.setCursor(0,1)
     lcd.printout("0/3")
     file1 = False
@@ -656,20 +655,20 @@ def OctoPrint():
         file1 = True
     lcd.clear()
     lcd.setCursor(0,0)
-    lcd.printout("Loading...")
+    lcd.printout(translation.get("global", "loading")) # Loading...
     lcd.setCursor(0,1)
     lcd.printout("1/3")
     if files.exist("/plugins/octolib.py"):
         file2 = True
     lcd.clear()
     lcd.setCursor(0,0)
-    lcd.printout("Loading...")
+    lcd.printout(translation.get("global", "loading")) # Loading...
     lcd.setCursor(0,1)
     lcd.printout("2/3")
     if file1 == True and file2 == True:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Loading...")
+        lcd.printout(translation.get("global", "loading")) # Loading...
         lcd.setCursor(0,1)
         lcd.printout("3/3")
         import plugins.octoprint as ocp
@@ -677,7 +676,7 @@ def OctoPrint():
     else:
         lcd.clear()
         lcd.setCursor(0,0)
-        lcd.printout("Please install")
+        lcd.printout(translation.get("global", "please_install")) # Please install
         lcd.setCursor(0,1)
         lcd.printout("OctoPrint Plugin")
         time.sleep(1)
@@ -688,20 +687,20 @@ def update():
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Checking for")
+    lcd.printout(translation.get("update", "check_1")) # Checking for
     lcd.setCursor(0,1)
-    lcd.printout("update...")
+    lcd.printout(translation.get("update", "check_2")) # update
     if wlan.isconnected() == False:
         lcd.clear()
         _temp_lcd_brightness = data.get('lcd_brightness')
         lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
         lcd.setCursor(0,0)
-        lcd.printout("No wi-fi")
+        lcd.printout(translation.get("update", "no_wifi_1")) # No Wi-Fi
         lcd.setCursor(0,1)
-        lcd.printout("connection")
+        lcd.printout(translation.get("update", "no_wifi_2")) # connection
         time.sleep(2.5)
         main()
-    print("Downloading version file")
+    print(translation.get("update", "debug_down_ver_file")) # Downloading version file
     requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/version_info.json", "/system/temp/version_info.json")
     version_info_temp = json.read("/system/temp/version_info.json")
     if version_info["version"] >= version_info_temp["version"]:
@@ -709,29 +708,28 @@ def update():
         _temp_lcd_brightness = data.get('lcd_brightness')
         lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
         lcd.setCursor(0,0)
-        lcd.printout("No need to")
+        lcd.printout(translation.get("update", "no_need_1")) # No need to
         lcd.setCursor(0,1)
-        lcd.printout("update!")
+        lcd.printout(translation.get("update", "no_need_2")) # update!
         time.sleep(2.5)
         main()
     lcd.clear()
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Downloading")
+    lcd.printout(translation.get("update", "downloading_1")) # Downloading
     lcd.setCursor(0,1)
-    lcd.printout("update...")
-    print("Downloading update file")
+    lcd.printout(translation.get("update", "downloading_2")) # update...
+    print(translation.get("update", "debug_down_update")) # Downloading update file
     requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/update.py", "/system/temp/update.py")
-    print("Downloading boot.py for update file...")
     requests.download_file("https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/boot_py_update.py", "/boot.py")
     lcd.clear()
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
     lcd.setCursor(0,0)
-    lcd.printout("Installing")
+    lcd.printout(translation.get("update", "install_1")) # Installing
     lcd.setCursor(0,1)
-    lcd.printout("update...")
+    lcd.printout(translation.get("update", "install_2")) # update...
     machine.reset()
     
     
@@ -749,14 +747,11 @@ if wlan.isconnected() == True:
             os.remove('/startOptions.gameberry')
             OctoPrint()
         
-
-print("Going to the menu for first time...")
 main()
-
 
 while True:
 
-    if button1.value() == 0 and button1state == 1:
+    if button1.value() == 0! and button1state == 1:
         button1state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
@@ -795,12 +790,12 @@ while True:
         elif currentMenu == 15:
             settings5()
         elif currentMenu == 17:
-            print("Entering bootloader(BOOTSEL)")
+            print(translation.get("debugger", "entering_bootloader")) # Entering bootloader(BOOTSEL)
             lcd.clear()
             lcd.setCursor(0,0)
-            lcd.printout("Entering")
+            lcd.printout(translation.get("settings", "entering_boot_1")) # Entering
             lcd.setCursor(0,1)
-            lcd.printout("bootloader...")
+            lcd.printout(translation.get("settings", "entering_boot_1")) # bootloader...
             time.sleep(1)
             lcd.clear()
             lcd.setRGB(0,0,0)
@@ -832,7 +827,7 @@ while True:
         elif currentMenu == 31:
             update()
     elif button1.value() == 1 and button1state == 0:
-        print("Button state updated")
+        print(translation.get("debugger", "button_state")) # Button state updated
         button1state = 1
      
     if button2.value() == 0 and button2state == 1:
@@ -902,7 +897,7 @@ while True:
             json.write("/settings.json", data)
             settings_buzzer_volume_selection()
     elif button2.value() == 1 and button2state == 0:
-        print("Button state updated")
+        print(translation.get("debugger", "button_state")) # Button state updated
         button2state = 1
 
     if home.value() == 0 and homestate == 1:
@@ -919,7 +914,7 @@ while True:
         else:
             main()
     elif home.value() == 1 and homestate == 0:
-        print("Button state updated")
+        print(translation.get("debugger", "button_state")) # Button state updated
         homestate = 1
 
     if currentMenu == 11:
