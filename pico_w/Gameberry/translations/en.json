@@ -4,7 +4,7 @@
         "author": "Kitki30",
         "description": "Default GameBerry Language.",
         "compatible_with": 0.93,
-        "version": 2
+        "version": 2.01
     },
     "translation": {
         "debugger": {
@@ -12,6 +12,7 @@
             "machine_freq": "Machine frequency",
             "settings_exist": "Settings exist!",
             "savedata_exist": "Savedata exist!",
+            "user_exist": "User exist!",
             "waiting_one_second": "Waiting one second",
             "play_gc_col": "Cleaned garbage!",
             "play_imported": "Game imported, launching...",

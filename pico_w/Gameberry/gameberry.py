@@ -64,7 +64,7 @@ rtc = machine.RTC()
 
 
 if files.exist("/system/user"):
-    print(translation.get("debugger", "user_exist")) # Savedata exist!
+    print(translation.get("debugger", "user_exist")) # User exist!
 else:
     files.create_folder("/system/user")
 

@@ -4,7 +4,7 @@
         "author": "Kitki30",
         "description": "Język polski dla GameBerry. Nie ma polskich znaków ponieważ ekran LCD1602 ich nie obsługuje!",
         "compatible_with": 0.93,
-        "version": 2
+        "version": 2.01
     },
     "translation": {
         "debugger": {
@@ -12,6 +12,7 @@
             "machine_freq": "Częstotliwość procesora",
             "settings_exist": "Ustawienia istnieją!",
             "savedata_exist": "Dane zapisów instnieją!",
+            "user_exist": "Użytkownik istnieje!",
             "waiting_one_second": "Czekam jendą sekunde!",
             "play_gc_col": "Wyczyszczono śmieci!",
             "play_imported": "Gra zaimportowana, włączam...",
