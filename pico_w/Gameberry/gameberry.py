@@ -27,7 +27,7 @@ button1state = 1
 button2state = 1
 homestate = 1
 
-version_info = json.read("/version_info.json")
+version_info = json.read("/system/info/version_info.json")
 
 version = version_info["version"]
 
