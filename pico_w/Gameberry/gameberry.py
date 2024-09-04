@@ -57,7 +57,7 @@ translation.load(data["language"])
 # Gameberry logo
 timeFormatted = utime.localtime(timezones.get_timezoned())
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-print("GameBerry v"+str(version)+" for "+ version_info["device"] + " " + translation.get("debugger", "gameberry_on") +" "+ uos.uname().machine) # Gameberry v{version} on {machine name}
+print("GameBerry v"+str(version)+"-"+str(version_info["version-stage"])+" for "+ version_info["device"] + " " + translation.get("debugger", "gameberry_on") +" "+ uos.uname().machine) # Gameberry v{version} on {machine name}
 print(translation.get("debugger", "machine_freq")+": "+str(machine.freq() / 1000000)+" Mhz") # Machine frequency: {freq}Mhz
 print(str(timeFormatted[2])+"."+str(timeFormatted[1])+"."+str(timeFormatted[0])+" "+str(timeFormatted[3])+":"+str(timeFormatted[4])+":"+str(timeFormatted[5]))
 print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")

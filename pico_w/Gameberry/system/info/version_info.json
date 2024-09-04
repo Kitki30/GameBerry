@@ -1,5 +1,6 @@
 {
-    "version": 0.94,
+    "version": 0.95,
+    "version-stage": "beta",
     "device": "rp2",
     "_comment": "Version info file, please don't delete or your device will not boot!"
 }
