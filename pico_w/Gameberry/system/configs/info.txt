@@ -1,0 +1,10 @@
+/system/configs folder is made for hardware configs that are typically not changed by user, here is the list what you can change there:
+
+/gpio_config.json
+Button gpio pins
+Buzzer pin
+lcd pins
+ina219 pins
+
+/ina219_config.json
+Ina219 shunt ohms

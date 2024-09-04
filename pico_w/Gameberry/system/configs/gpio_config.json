@@ -1,0 +1,18 @@
+{
+    "buttons": {
+        "button_1": 3,
+        "button_2": 2,
+        "home": 15
+    },
+    "buzzer": 16,
+    "lcd": {
+        "sda": 4,
+        "scl": 5,
+        "i2c_num": 0
+    },
+    "ina": {
+        "sda": 6,
+        "scl": 7,
+        "i2c_num": 1
+    }
+}
