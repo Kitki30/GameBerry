@@ -63,15 +63,15 @@ print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
 rtc = machine.RTC()
 
 
+if files.exist("/system/user"):
+    print(translation.get("debugger", "user_exist")) # Savedata exist!
+else:
+    files.create_folder("/system/user")
 
-
-
-
-
-if files.exist("/savedata"):
+if files.exist("/system/user/savedata"):
     print(translation.get("debugger", "savedata_exist")) # Savedata exist!
 else:
-    files.create_folder("/savedata")
+    files.create_folder("/system/user/savedata")
 
 
 
