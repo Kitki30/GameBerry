@@ -219,6 +219,11 @@ while is_end == False:
             log("Reading target path...")
             line = line + 1
             path = readline(line, download_list_path)
+            overwrite = True
+            if path == "no-overwrite":
+                overwrite = False
+                line = line + 1
+                path = readline(line, download_list_path)
             log("Target file path: "+path)
             print("Path: /" + path)
             log("Reading file download URL...")
@@ -227,7 +232,10 @@ while is_end == False:
             log("File download URL: "+url)
             print("URL: " + url)
             log("Downloading file...")
-            download_file(url, "/" + path)
+            if exist("/" + path) and overwrite == False:
+                log("Overwrite protection enabled!")
+            else:
+                download_file(url, "/" + path)
             log("Downloaded")
             print("Downloaded")
         elif read == "message":

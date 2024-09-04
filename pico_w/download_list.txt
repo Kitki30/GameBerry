@@ -34,9 +34,11 @@ download
 system/modules/hardware/hardware.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/hardware/hardware.py
 download
+no-overwrite
 system/configs/gpio_config.json
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/configs/gpio_config.json
 download
+no-overwrite
 system/configs/ina219_config.json
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/configs/ina219_config.json
 download
