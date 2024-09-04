@@ -10,4 +10,5 @@ def exist(filename):
 if exist("/system/temp/is_updated"):
     print("Update was alredy done")
 else:
-    exec(open("/system/temp/update.py").read())
+    if exist("/system/temp/update.py"):
+        exec(open("/system/temp/update.py").read())

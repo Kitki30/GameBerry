@@ -1,5 +1,7 @@
 # Don't change anything under than line unless you know what you are doing!
 print("Running")
+led = machine.Pin("LED", machine.Pin.OUT)
+led.on()
 
 # Download list URL
 download_list_url = "https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/download_list.txt"

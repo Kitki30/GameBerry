@@ -52,6 +52,7 @@ def thread_activity():
     print("Stopped")
             
 def start():
+    global thread_active
     thread_active = True
     json.write("/thread_temp_file.json", ujson.dumps({"active": thread_active, "sd_monitor": thread_monitor_sd_card, "sd_not_used": sd_not_used}))
     _thread.start_new_thread(thread_activity, ())
