@@ -1,5 +1,5 @@
 Kitki30-Gameberry-Download-List-File
-version 0.9
+version 1
 START
 message
 Welcome to Gameberry Download List File
@@ -14,9 +14,37 @@ time
 log-message
 ------ Installation started ------
 create-device-config
+folder
+system
+folder
+system/info
+folder
+system/modules
+folder
+system/user
+folder
+system/tools
+folder
+system/configs
+folder
+system/user/savedata
+folder
+system/modules/hardware
 download
-version_info.json
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/version_info.json
+system/modules/hardware/hardware.py
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/hardware/hardware.py
+download
+system/configs/gpio_config.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/configs/gpio_config.json
+download
+system/configs/ina219_config.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/configs/ina219_config.json
+download
+system/configs/info.txt
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/configs/info.txt
+download
+system/info/version_info.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/info/version_info.json
 download
 main.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/main.py
@@ -24,8 +52,11 @@ download
 gameberry.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/gameberry.py
 download
-voltage_meter_mode.py
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/voltage_meter_mode.py
+system/tools/voltage_meter_mode.py
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/tools/voltage_meter_mode.py
+download
+system/tools/info.txt
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/tools/info.txt
 download
 boot_config.json
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/boot_config.json
@@ -106,11 +137,6 @@ https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/transl
 download
 translations/en.json
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/translations/en.json
-folder
-webSetup
-download
-webSetup/webSetup.py
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/webSetup/webSetup.py
 log-message
 ------ Installation started ------
 comment
