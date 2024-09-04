@@ -2,11 +2,12 @@
 import time
 from machine import Pin,I2C
 import modules.characterSets as charSets
+import system.modules.hardware.hardware as hw
 
-RGB1602_SDA = Pin(4)
-RGB1602_SCL = Pin(5)
+RGB1602_SDA = Pin(hw.lcd_sda())
+RGB1602_SCL = Pin(hw.lcd_scl())
 
-RGB1602_I2C = I2C(0,sda = RGB1602_SDA,scl = RGB1602_SCL ,freq = 400000)
+RGB1602_I2C = I2C(hw.lcd_num(),sda = RGB1602_SDA,scl = RGB1602_SCL ,freq = 400000)
 
 #Device I2C Arress
 LCD_ADDRESS   =  (0x7c>>1)

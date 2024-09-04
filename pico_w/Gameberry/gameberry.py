@@ -12,6 +12,7 @@ import modules.customExceptions as exceptions
 import modules.translations as translation
 import os
 import modules.requests as requests
+import system.modules.hardware.hardware as hw
 
 events_working = False
 runEvents = True
@@ -20,9 +21,11 @@ gc.collect()
 
 
 # Initialize buttons
-button1 = Pin(3, Pin.IN, Pin.PULL_UP) # First button (GPIO3)
-button2 = Pin(2, Pin.IN, Pin.PULL_UP) # Second button (GPIO2)
-home = Pin(15, Pin.IN, Pin.PULL_UP) # Home button (GPIO15)
+# Read button config
+button_conf = hw.button_conf()
+button1 = Pin(button_conf["buttons"]["button_1"], Pin.IN, Pin.PULL_UP) # First button (GPIO3)
+button2 = Pin(button_conf["buttons"]["button_2"], Pin.IN, Pin.PULL_UP) # Second button (GPIO2)
+home = Pin(button_conf["buttons"]["home"], Pin.IN, Pin.PULL_UP) # Home button (GPIO15)
 button1state = 1
 button2state = 1
 homestate = 1
@@ -119,7 +122,7 @@ lcd.clear()
 """
 
 #  Buzzer (GPIO16)
-buzzer = PWM(Pin(16, Pin.OUT))
+buzzer = PWM(Pin(hw.buzzer_conf(), Pin.OUT))
 buzzer.duty_u16(0)
 
 # Connect to wifi
