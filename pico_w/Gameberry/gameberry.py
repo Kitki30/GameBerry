@@ -27,17 +27,6 @@ button1state = 1
 button2state = 1
 homestate = 1
 
-safeboot = False
-
-if home.value() == 0:
-    safeboot = True
-    while safeboot == True:
-        print("Machine is in safeboot")
-        print("Press button 1 to continue!")
-        if button1.value() == 0:
-            safeboot = False
-        time.sleep(5)
-
 version_info = json.read("/version_info.json")
 
 version = version_info["version"]
