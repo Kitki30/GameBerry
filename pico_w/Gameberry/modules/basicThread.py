@@ -21,6 +21,7 @@ def thread_activity():
     global threadTime
     global sd_not_used
     global thread_reset_time
+    thread_active = True
     while thread_active == True:
         threadTime = threadTime + 1
         thread_temp_file = json.read("/thread_temp_file.json")
