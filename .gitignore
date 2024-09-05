@@ -1,5 +1,6 @@
 settings.json
 .vscode/
+.bak
 .micropico
 *.code-workspace
 __pycache__

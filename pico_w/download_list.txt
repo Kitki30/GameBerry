@@ -17,6 +17,8 @@ create-device-config
 folder
 system
 folder
+system/boot
+folder
 system/info
 folder
 system/modules
@@ -30,6 +32,8 @@ folder
 system/user/savedata
 folder
 system/modules/hardware
+folder
+system/system_files
 download
 system/modules/hardware/hardware.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/hardware/hardware.py
@@ -51,8 +55,8 @@ download
 main.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/main.py
 download
-gameberry.py
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/gameberry.py
+system/system_files/gameberry.py
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/system_files/gameberry.py
 download
 system/tools/voltage_meter_mode.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/tools/voltage_meter_mode.py
@@ -60,13 +64,13 @@ download
 system/tools/info.txt
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/tools/info.txt
 download
-boot_config.json
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/boot_config.json
+system/boot/config.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/boot/config.json
 folder
-default
+system/default
 download
-default/settings_default.json
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/default/settings_default.json
+system/default/settings_default.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/default/settings_default.json
 folder
 modules
 download
@@ -132,13 +136,13 @@ download
 plugins/octoprint.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/plugins/octoprint.py
 folder
-translations
+system/translations
 download
-translations/pl.json
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/translations/pl.json
+system/translations/pl.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/translations/pl.json
 download
-translations/en.json
-https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/translations/en.json
+system/translations/en.json
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/translations/en.json
 log-message
 ------ Installation started ------
 comment

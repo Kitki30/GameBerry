@@ -27,7 +27,7 @@ def calculate_discharge_time(capacity_mAh, discharge_current_mA):
     return discharge_time_hours
 
 def calibrate():
-    battery = json.read("/settings.json")
+    battery = json.read("/system/user/settings.json")
     capacity = battery["Battery"]["capacity"]
     charge_max_V = 0.0
     charge_min_V = 0.0

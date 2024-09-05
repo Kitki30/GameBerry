@@ -36,19 +36,19 @@ version = version_info["version"]
 
 lcd=RGB1602.RGB1602(16,2)
 lcd.clear()
-if files.exist("/settings.json"):
+if files.exist("/system/user/settings.json"):
     print(translation.get("debugger", "settings_exist")) # Settings exist!
 else:
-    if files.exist("/default/settings_default.json"):
+    if files.exist("/system/default/settings_default.json"):
         try:
-             files.copy("/default/settings_default.json", "/settings.json")
+             files.copy("/system/default/settings_default.json", "/system/user/settings.json")
         except:
             exceptions.ShowErrorScreen_with_code(lcd, "file_copy_error")
-            raise exceptions.FileCopyError("Cannot copy /default/settings_default.json to /settings.json! Cannot boot!")
+            raise exceptions.FileCopyError("Cannot copy /system/default/settings_default.json to /settings.json! Cannot boot!")
     else:
         exceptions.ShowErrorScreen_with_code(lcd, "defaults_error")
-        raise exceptions.DefaultsNotFound("Default file /default/settings_default.json, not found! Cannot boot!")
-data = json.read("/settings.json")
+        raise exceptions.DefaultsNotFound("Default file /system/default/settings_default.json, not found! Cannot boot!")
+data = json.read("/system/user/settings.json")
 
 import modules.time as timezones
 
@@ -803,7 +803,7 @@ while True:
         elif currentMenu == 21:
             if data['lcd_brightness'] is not 255:
                 data['lcd_brightness'] = data['lcd_brightness'] + 5
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_display_brightness_selector()
         elif currentMenu == 22:
             settings_buzzer_volume()
@@ -814,7 +814,7 @@ while True:
         elif currentMenu == 25:
             if data['buzzer_volume'] is not 2000:
                 data['buzzer_volume'] = data['buzzer_volume'] + 100
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_buzzer_volume_selection()
         elif currentMenu == 30:
             OctoPrint()
@@ -875,7 +875,7 @@ while True:
         elif currentMenu == 21:
             if data['lcd_brightness'] is not 0:
                 data['lcd_brightness'] = data['lcd_brightness'] - 5
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_display_brightness_selector()
         elif currentMenu == 22:
             settings6()
@@ -888,7 +888,7 @@ while True:
         elif currentMenu == 25:
             if data['buzzer_volume'] is not 0:
                 data['buzzer_volume'] = data['buzzer_volume'] - 100
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_buzzer_volume_selection()
     elif button2.value() == 1 and button2state == 0:
         print(translation.get("debugger", "button_state")) # Button state updated

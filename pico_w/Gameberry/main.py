@@ -32,9 +32,9 @@ if postBypass.value() == 0:
         digits = '0123456789'
         chars = letters + digits
         random1 = ''.join(random.choice(chars) for _ in range(64))
-        with open("/power_on_self_test_file", 'wb') as file:
+        with open("/system/temp/power_on_self_test_file", 'wb') as file:
             file.write(random1.encode('utf-8'))
-        with open("/power_on_self_test_file", 'rb') as file:
+        with open("/system/temp/power_on_self_test_file", 'rb') as file:
             readed = file.read().decode('utf-8')
             if random1 == readed:
                 print("Flash memory - Working")
@@ -83,7 +83,7 @@ buzzer.freq(659)
 time.sleep(0.1)
 buzzer.duty_u16(0)
 
-boot_config = json.read("/boot_config.json")
+boot_config = json.read("/system/boot/config.json")
 
 print("\nAll things working ready to boot!")
 
