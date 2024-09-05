@@ -17,6 +17,8 @@ create-device-config
 folder
 system
 folder
+system/scripts
+folder
 system/boot
 folder
 system/info
@@ -34,6 +36,9 @@ folder
 system/modules/hardware
 folder
 system/system_files
+download
+system/scripts/factory_reset.py
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/scripts/factory_reset.py
 download
 system/modules/hardware/hardware.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/hardware/hardware.py
