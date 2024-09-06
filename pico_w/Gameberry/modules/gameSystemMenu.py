@@ -25,7 +25,7 @@ def show(lcd):
     lcd.printout("Loading data!")
     lcd.setCursor(0,1)
     lcd.printout("Please wait...")
-    data = json.read("/settings.json")
+    data = json.read("/system/user/settings.json")
     time.sleep(0.2)
     _temp_lcd_brightness = data.get('lcd_brightness')
     lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)

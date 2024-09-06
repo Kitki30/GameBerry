@@ -1,7 +1,7 @@
 import utime
 import modules.json as json
 
-data = json.read("/settings.json")
+data = json.read("/system/user/settings.json")
 
 def get_timezoned():   
     time1=utime.time() 

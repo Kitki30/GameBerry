@@ -10,12 +10,13 @@ import modules.ntp as ntp
 import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
-import os
 import modules.requests as requests
 import system.modules.hardware.hardware as hw
+import system.modules.eggs as eggs
 
 events_working = False
 runEvents = True
+event_ok = 0
 
 gc.collect()
 
@@ -36,19 +37,19 @@ version = version_info["version"]
 
 lcd=RGB1602.RGB1602(16,2)
 lcd.clear()
-if files.exist("/settings.json"):
+if files.exist("/system/user/settings.json"):
     print(translation.get("debugger", "settings_exist")) # Settings exist!
 else:
-    if files.exist("/default/settings_default.json"):
+    if files.exist("/system/default/settings_default.json"):
         try:
-             files.copy("/default/settings_default.json", "/settings.json")
+             files.copy("/system/default/settings_default.json", "/system/user/settings.json")
         except:
             exceptions.ShowErrorScreen_with_code(lcd, "file_copy_error")
-            raise exceptions.FileCopyError("Cannot copy /default/settings_default.json to /settings.json! Cannot boot!")
+            raise exceptions.FileCopyError("Cannot copy /system/default/settings_default.json to /settings.json! Cannot boot!")
     else:
         exceptions.ShowErrorScreen_with_code(lcd, "defaults_error")
-        raise exceptions.DefaultsNotFound("Default file /default/settings_default.json, not found! Cannot boot!")
-data = json.read("/settings.json")
+        raise exceptions.DefaultsNotFound("Default file /system/default/settings_default.json, not found! Cannot boot!")
+data = json.read("/system/user/settings.json")
 
 import modules.time as timezones
 
@@ -734,18 +735,13 @@ if wlan.isconnected() == True:
     lcd.clear()
     lcd.printout(translation.get("rtc", "setting_clock")) # Setting clock...
     ntp.sync(wlan)
-    if files.exist("/startOptions.gameberry"):
-        f = open('/startOptions.gameberry')
-        if f.read() == "octo-plugin":
-            f.close()
-            os.remove('/startOptions.gameberry')
-            OctoPrint()
         
 main()
 
 while True:
 
     if button1.value() == 0 and button1state == 1:
+        event_ok = 0
         button1state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
@@ -803,7 +799,7 @@ while True:
         elif currentMenu == 21:
             if data['lcd_brightness'] is not 255:
                 data['lcd_brightness'] = data['lcd_brightness'] + 5
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_display_brightness_selector()
         elif currentMenu == 22:
             settings_buzzer_volume()
@@ -814,7 +810,7 @@ while True:
         elif currentMenu == 25:
             if data['buzzer_volume'] is not 2000:
                 data['buzzer_volume'] = data['buzzer_volume'] + 100
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_buzzer_volume_selection()
         elif currentMenu == 30:
             OctoPrint()
@@ -825,6 +821,7 @@ while True:
         button1state = 1
      
     if button2.value() == 0 and button2state == 1:
+        event_ok = 0
         button2state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
@@ -875,7 +872,7 @@ while True:
         elif currentMenu == 21:
             if data['lcd_brightness'] is not 0:
                 data['lcd_brightness'] = data['lcd_brightness'] - 5
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_display_brightness_selector()
         elif currentMenu == 22:
             settings6()
@@ -888,7 +885,7 @@ while True:
         elif currentMenu == 25:
             if data['buzzer_volume'] is not 0:
                 data['buzzer_volume'] = data['buzzer_volume'] - 100
-            json.write("/settings.json", data)
+            json.write("/system/user/settings.json", data)
             settings_buzzer_volume_selection()
     elif button2.value() == 1 and button2state == 0:
         print(translation.get("debugger", "button_state")) # Button state updated
@@ -905,6 +902,12 @@ while True:
             settings_display_brightness()
         elif currentMenu == 25:
             settings_buzzer_volume()
+        elif currentMenu == 0:
+            event_ok = event_ok + 1
+            if event_ok == 5:
+                eggs.menu_game(lcd)
+            elif event_ok == 8:
+                eggs.menu_game2(lcd)
         else:
             main()
     elif home.value() == 1 and homestate == 0:

@@ -6,7 +6,7 @@ translation = None
 
 def load(lang):
     global translation
-    translationFile = "/translations/"+lang+".json"
+    translationFile = "/system/translations/"+lang+".json"
     if files.exist(translationFile):
         translation = json.read(translationFile)
         print(translation["translation"]["translations"]["translation_loaded"]+lang+" "+translation["info"]["name"])
