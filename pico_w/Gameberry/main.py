@@ -48,6 +48,8 @@ if postBypass.value() == 0:
 if files.exist("/boot.py"):
     os.remove("boot.py")
 
+lcd = None
+
 # LCD
 if postBypass.value() == 0:
     try:
@@ -86,6 +88,13 @@ buzzer.duty_u16(0)
 boot_config = json.read("/system/boot/config.json")
 
 print("\nAll things working ready to boot!")
+
+# Check for bootflags
+if files.exist("/system/boot/custom_boot.json"):
+    data = json.read("/system/boot/custom_boot.json")
+    os.remove("/system/boot/custom_boot.json")
+    exec(open(data["file"]).read())
+    machine.soft_reset()
 
 # Boot
 if files.exist(boot_config["main"]["file"]):

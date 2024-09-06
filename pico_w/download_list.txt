@@ -40,6 +40,9 @@ download
 system/scripts/factory_reset.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/scripts/factory_reset.py
 download
+system/modules/eggs.py
+https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/eggs.py
+download
 system/modules/hardware/hardware.py
 https://raw.githubusercontent.com/Kitki30/GameBerry/main/pico_w/Gameberry/system/modules/hardware/hardware.py
 download

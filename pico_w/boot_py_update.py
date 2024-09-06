@@ -7,7 +7,7 @@ def exist(filename):
     except OSError:
         return False
     
-if exist("/system/temp/is_updated"):
+if exist("/system/temp/list.txt"):
     print("Update was alredy done")
 else:
     if exist("/system/temp/update.py"):

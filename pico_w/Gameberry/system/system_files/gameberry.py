@@ -10,12 +10,13 @@ import modules.ntp as ntp
 import gc
 import modules.customExceptions as exceptions
 import modules.translations as translation
-import os
 import modules.requests as requests
 import system.modules.hardware.hardware as hw
+import system.modules.eggs as eggs
 
 events_working = False
 runEvents = True
+event_ok = 0
 
 gc.collect()
 
@@ -734,18 +735,13 @@ if wlan.isconnected() == True:
     lcd.clear()
     lcd.printout(translation.get("rtc", "setting_clock")) # Setting clock...
     ntp.sync(wlan)
-    if files.exist("/startOptions.gameberry"):
-        f = open('/startOptions.gameberry')
-        if f.read() == "octo-plugin":
-            f.close()
-            os.remove('/startOptions.gameberry')
-            OctoPrint()
         
 main()
 
 while True:
 
     if button1.value() == 0 and button1state == 1:
+        event_ok = 0
         button1state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
@@ -825,6 +821,7 @@ while True:
         button1state = 1
      
     if button2.value() == 0 and button2state == 1:
+        event_ok = 0
         button2state = 0
         buzzer.duty_u16(data.get('buzzer_volume'))
         buzzer.freq(659)
@@ -905,6 +902,12 @@ while True:
             settings_display_brightness()
         elif currentMenu == 25:
             settings_buzzer_volume()
+        elif currentMenu == 0:
+            event_ok = event_ok + 1
+            if event_ok == 5:
+                eggs.menu_game(lcd)
+            elif event_ok == 8:
+                eggs.menu_game2(lcd)
         else:
             main()
     elif home.value() == 1 and homestate == 0:
