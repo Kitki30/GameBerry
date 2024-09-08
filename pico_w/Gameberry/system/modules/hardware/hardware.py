@@ -8,6 +8,7 @@ import ujson
 # Read config
 gpio_conf = json.read("/system/configs/gpio_config.json")
 ina_conf = json.read("/system/configs/ina219_config.json")
+device_config = json.read("/device_config.json")
 
 # Buttons
 def button_conf():
@@ -39,3 +40,6 @@ def ina_num():
 
 def ina_shunt():
     return ina_conf["shunt_ohms"]
+
+def ina_ena():
+    return device_config["INA219"]
