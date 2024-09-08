@@ -1,8 +1,9 @@
 import modules.RGB1602 as RGB1602
+import modules.ina219 as ina219
 import uos
 import modules.json as json
 import utime as time, utime
-from machine import Pin, PWM
+from machine import Pin, PWM, I2C
 import machine
 import network
 import modules.files as files
@@ -13,10 +14,17 @@ import modules.translations as translation
 import modules.requests as requests
 import system.modules.hardware.hardware as hw
 import system.modules.eggs as eggs
+import modules.battery as bat
 
 events_working = False
 runEvents = True
 event_ok = 0
+
+ina_vol_meter = None
+
+if hw.ina_ena() == True:
+    i2c = I2C(hw.ina_num(), scl=Pin(hw.ina_scl()), sda=Pin(hw.ina_sda()), freq=100000)
+    ina_vol_meter = modules.ina219.INA219(hw.ina_shunt(), i2c)
 
 gc.collect()
 
@@ -30,6 +38,8 @@ home = Pin(button_conf["buttons"]["home"], Pin.IN, Pin.PULL_UP) # Home button (G
 button1state = 1
 button2state = 1
 homestate = 1
+
+bat_calibration = json.read("/system/configs/battery_calibration.json")
 
 version_info = json.read("/system/info/version_info.json")
 
@@ -727,7 +737,31 @@ def update():
     lcd.printout(translation.get("update", "install_2")) # update...
     machine.reset()
     
-    
+def battery():
+    global currentMenu
+    currentMenu = 33
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("Battery")
+    lcd.setCursor(0,1)
+    lcd.printout(translation.get("menu", "ok_next")) # 1. OK 2. Next
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu) 
+
+def battery1():
+    global currentMenu
+    global bat_calibration
+    bat_calibration = json.read("/system/configs/battery_calibration.json")
+    currentMenu = 34
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout(bat.calculate_battery_level(ina_vol_meter.bus_voltage(), bat_calibration["v_min"], bat_calibration["v_max"]) + "%")
+    lcd.setCursor(0,1)
+    lcd.printout(ina_vol_meter.current()+"mA") # Exit
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu) 
 
 # Sync clock
 if wlan.isconnected() == True:
@@ -755,6 +789,8 @@ while True:
             apps()
         elif currentMenu == 2:
             exit1()
+        elif currentMenu == 33:
+            battery1()
         elif currentMenu == 6:
             apps1()
         elif currentMenu == 5:
@@ -830,6 +866,11 @@ while True:
         if currentMenu == 0:
             apps1()
         elif currentMenu == 7:
+            if hw.ina_ena() == True:
+                battery()
+            else:
+                settings()
+        elif currentMenu == 33:
             settings()
         elif currentMenu == 1:
             exit()
@@ -908,6 +949,7 @@ while True:
                 eggs.menu_game(lcd)
             elif event_ok == 8:
                 eggs.menu_game2(lcd)
+                event_ok = 0
         else:
             main()
     elif home.value() == 1 and homestate == 0:
@@ -918,6 +960,14 @@ while True:
         whatTimeIsIt1()
     elif currentMenu == 12:
         whatTimeIsIt2()
+    elif currentMenu == 34:
+        battery1()
+
+    if battery_calib == 20:
+        battery_calib = 0
+        bat_calibration = json.read("/system/configs/battery_calibration.json")
+        bat.calculate_battery_level(ina_vol_meter.bus_voltage(), bat_calibration["v_min"], bat_calibration["v_max"]) 
     
-    
+    battery_calib = battery_calib + 1
+
     time.sleep(0.025)

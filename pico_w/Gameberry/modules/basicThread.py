@@ -24,7 +24,7 @@ def thread_activity():
     thread_active = True
     while thread_active == True:
         threadTime = threadTime + 1
-        thread_temp_file = json.read("/thread_temp_file.json")
+        thread_temp_file = json.read("/sytem/temp/thread_temp_file.json")
         thread_active = thread_temp_file["active"]
         thread_monitor_sd_card = thread_temp_file["sd_monitor"]
         sd_not_used = thread_temp_file["sd_not_used"]
@@ -49,11 +49,11 @@ def thread_activity():
             threadTime = 0
         time.sleep(1)              
     print("Stopping basicThread")
-    os.remove("/thread_temp_file.json")
+    os.remove("/system/temp/thread_temp_file.json")
     print("Stopped")
             
 def start():
     global thread_active
     thread_active = True
-    json.write("/thread_temp_file.json", ujson.dumps({"active": thread_active, "sd_monitor": thread_monitor_sd_card, "sd_not_used": sd_not_used}))
+    json.write("/sytem/temp/thread_temp_file.json", ujson.dumps({"active": thread_active, "sd_monitor": thread_monitor_sd_card, "sd_not_used": sd_not_used}))
     _thread.start_new_thread(thread_activity, ())
