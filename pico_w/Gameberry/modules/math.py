@@ -3,3 +3,4 @@ def is_positive(number):
         return True
     elif number < 0:
         return False
+    

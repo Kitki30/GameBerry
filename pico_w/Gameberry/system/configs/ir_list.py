@@ -1,0 +1,1 @@
+on_off = ["0x20DF10EF"] # LG 

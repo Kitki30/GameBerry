@@ -763,6 +763,19 @@ def battery1():
     lcd.printout(ina_vol_meter.current()+"mA") # Exit
     print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu) 
 
+def apps_ir():
+    global currentMenu
+    global bat_calibration
+    currentMenu = 36
+    lcd.clear()
+    _temp_lcd_brightness = data.get('lcd_brightness')
+    lcd.setRGB(_temp_lcd_brightness, _temp_lcd_brightness, _temp_lcd_brightness)
+    lcd.setCursor(0,0)
+    lcd.printout("IR Pilot")
+    lcd.setCursor(0,1)
+    lcd.printout(translation.get("menu", "ok_next")) # Exit
+    print(translation.get("debugger", "curr_menu")+str(currentMenu)) # Current menu: (menu) 
+
 # Sync clock
 if wlan.isconnected() == True:
     print(translation.get("rtc", "debugger_rtc")) # Sync rtc clock...
@@ -852,6 +865,10 @@ while True:
             OctoPrint()
         elif currentMenu == 31:
             update()
+        elif currentMenu == 36:
+            import system.system_files.ir_app as ir_app
+            ir_app.start(lcd)
+            apps_ir()
     elif button1.value() == 1 and button1state == 0:
         print(translation.get("debugger", "button_state")) # Button state updated
         button1state = 1
@@ -887,6 +904,11 @@ while True:
         elif currentMenu == 10:
             OctoPrint1()
         elif currentMenu == 30:
+            if hw.ir_ena() == True:
+                apps_ir()
+            else:
+                appsExit()
+        elif currentMenu == 36:
             appsExit()
         elif currentMenu == 11:
             whatTimeIsIt2()
