@@ -43,3 +43,7 @@ def ina_shunt():
 
 def ina_ena():
     return device_config["INA219"]
+
+# IR Blaster
+def ir_ena():
+    return device_config["ir"]

@@ -7,6 +7,7 @@ WiFi_PASSWORD = ""
 # Set gameberry device config here
 INA219 = True
 SD_READER = True
+IR_DIODE = True
 
 # Don't change anything under than line unless you know what you are doing!
 
@@ -56,8 +57,8 @@ def write_json(filename, data):
     with open(filename, 'wb') as file:
         ujson.dump(data, file)
 
-def write_device_config(ina, sd):
-    write_json("/device_confg.json", ujson.dumps({"INA219": ina, "SD_READER": sd}))
+def write_device_config(ina, sd, ir):
+    write_json("/device_confg.json", ujson.dumps({"INA219": ina, "SD_READER": sd, "ir": ir}))
     
 def GET_request(url):
     log("GC Collect...")
@@ -226,7 +227,7 @@ while is_end == False:
         if read == "create-device-config":
             log("Creating device config...")
             print("Writing device config...")
-            write_device_config(INA219, SD_READER)
+            write_device_config(INA219, SD_READER, IR_DIODE)
         elif read == "folder":
             log("Creating folder...")
             print("Creating folder...")
@@ -234,7 +235,10 @@ while is_end == False:
             line = line + 1
             read = readline(line, download_list_path)
             log("Creating folder: " + read)
-            os.mkdir("/" + read)
+            if exist("/" + read):
+                print("Folder alredy exists")
+            else:
+                os.mkdir("/" + read)
             log("Created folder")
             print("Created folder: " + read)
         elif read == "download":
@@ -245,6 +249,10 @@ while is_end == False:
             path = readline(line, download_list_path)
             log("Target file path: "+path)
             print("Path: /" + path)
+            if path == "no-overwrite":
+                line = line + 1
+                path = readline(line, download_list_path)
+                print("Path: /" + path)
             log("Reading file download URL...")
             line = line + 1
             url = readline(line, download_list_path)
